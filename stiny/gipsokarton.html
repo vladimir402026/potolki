@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор гіпсокартону онлайн — розрахунок листів, профілів UD/CD та комплектуючих | БудКальк</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-container">
+            <a href="../index.html" class="logo"><span class="logo-icon">📐</span><span class="logo-text">Буд<span class="accent">Кальк</span></span></a>
+            <nav class="nav">
+                <a href="../index.html#stiny">Стіни та стеля</a>
+                <a href="../index.html#pidloga">Підлога</a>
+                <a href="../index.html#inzheneriya">Інженерія</a>
+                <a href="../index.html#zagalni">Загальні</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumbs"><a href="../index.html">Головна</a> &rarr; <a href="../index.html#stiny">Стіни та стеля</a> &rarr; <span>Калькулятор гіпсокартону</span></div>
+        <div class="page-header">
+            <h1>Калькулятор гіпсокартону та профілів</h1>
+            <p>Розрахуйте листи ГКЛ, металевий каркас (UD, CD) та всі необхідні кріплення для стін або стелі.</p>
+        </div>
+
+        <div class="calc-wrapper">
+            <div class="calc-form-box">
+                <div class="form-section-title">1. Тип конструкції</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="constructType">Що обшиваємо?</label>
+                        <select id="constructType">
+                            <option value="wall">Облицювання стін (каркас)</option>
+                            <option value="ceiling">Підвісна стеля (однорівнева)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="layersCount">Кількість шарів ГКЛ</label>
+                        <select id="layersCount">
+                            <option value="1" selected>1 шар (стандарт)</option>
+                            <option value="2">2 шари (підвищена міцність)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section-title">2. Розміри поверхні</div>
+                <div class="form-grid">
+                    <div class="form-group"><label for="length">Довжина (м)</label><input type="number" id="length" value="4.5" step="0.1" min="0.5"></div>
+                    <div class="form-group"><label for="widthOrHeight">Ширина стелі або висота стіни (м)</label><input type="number" id="widthOrHeight" value="3.2" step="0.1" min="0.5"></div>
+                </div>
+
+                <div class="form-section-title">3. Розмір листа ГКЛ та профілю</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="sheetSize">Розмір листа гіпсокартону</label>
+                        <select id="sheetSize">
+                            <option value="3.0">1200 × 2500 мм (3.0 м²)</option>
+                            <option value="2.4">1200 × 2000 мм (2.4 м²)</option>
+                            <option value="3.6">1200 × 3000 мм (3.6 м²)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="profileLen">Довжина профілю (м)</label>
+                        <select id="profileLen">
+                            <option value="3" selected>3 метри (стандарт)</option>
+                            <option value="4">4 метри</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group"><label for="reserve">Запас на підрізку листів (%)</label><input type="number" id="reserve" value="10" step="1" min="0" max="30"></div>
+
+                <button type="button" class="btn-calc" id="calcBtn">Розрахувати матеріали</button>
+            </div>
+
+            <div class="calc-result-box">
+                <div class="result-header">📊 Комплектація матеріалів</div>
+                <div class="result-main-card">
+                    <span>Листи гіпсокартону (ГКЛ)</span>
+                    <strong id="resSheets">6 шт.</strong>
+                    <span id="resAreaNote">площа поверхні 14.4 м²</span>
+                </div>
+                <ul class="result-list">
+                    <li><span>Профіль направляючий UD (<span class="pLen">3</span> м):</span><strong id="resUD">6 шт.</strong></li>
+                    <li><span>Профіль стійковий/стельовий CD (<span class="pLen">3</span> м):</span><strong id="resCD">12 шт.</strong></li>
+                    <li><span>Підвіс прямий (П-подібний):</span><strong id="resHangers">36 шт.</strong></li>
+                    <li><span>З'єднувач «Краб» (для стелі):</span><strong id="resCrabs">0 шт.</strong></li>
+                    <li><span>Дюбель-цвях 6×40 (для UD та підвісів):</span><strong id="resDowels">105 шт.</strong></li>
+                    <li><span>Саморізи по металу 3.5×25 (для ГКЛ):</span><strong id="resScrewsGKL">360 шт.</strong></li>
+                    <li><span>Саморізи «блошки» 3.5×9.5 (для каркасу):</span><strong id="resScrewsMetal">110 шт.</strong></li>
+                </ul>
+                <button type="button" class="btn-copy" id="copyBtn">📋 Скопіювати список</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer"><div class="container"><p>&copy; 2026 БудКальк — Усі будівельні розрахунки в одному місці.</p></div></footer>
+
+    <script>
+        function calculateDrywall() {
+            var type = document.getElementById('constructType').value;
+            var layers = parseInt(document.getElementById('layersCount').value) || 1;
+            var length = parseFloat(document.getElementById('length').value) || 0;
+            var width = parseFloat(document.getElementById('widthOrHeight').value) || 0;
+            var sheetArea = parseFloat(document.getElementById('sheetSize').value) || 3.0;
+            var profileLen = parseFloat(document.getElementById('profileLen').value) || 3;
+            var reserve = parseFloat(document.getElementById('reserve').value) || 10;
+
+            var area = length * width;
+            var perimeter = (length + width) * 2;
+
+            var totalSheetArea = area * layers * (1 + reserve / 100);
+            var sheets = Math.ceil(totalSheetArea / sheetArea);
+
+            var udMeters = perimeter * 1.1;
+            var udCount = Math.ceil(udMeters / profileLen);
+
+            var step = type === 'wall' ? 0.6 : 0.5;
+            var mainRows = Math.ceil(length / step) + 1;
+            var cdMeters = mainRows * width;
+
+            var crabs = 0;
+            if (type === 'ceiling') {
+                var crossRows = Math.floor(width / 1.25);
+                cdMeters += crossRows * length;
+                crabs = mainRows * crossRows;
+            }
+            var cdCount = Math.ceil((cdMeters * 1.1) / profileLen);
+            var hangers = Math.ceil(cdMeters / 0.65);
+
+            var dowels = Math.ceil((udMeters / 0.5) + (hangers * 2));
+            var screwsGKL = Math.ceil(area * 22 * layers);
+            var screwsMetal = Math.ceil(hangers * 2 + crabs * 4 + udCount * 4);
+
+            document.getElementById('resSheets').textContent = sheets + ' шт.';
+            document.getElementById('resAreaNote').textContent = 'площа поверхні ' + area.toFixed(1) + ' м²';
+            
+            document.querySelectorAll('.pLen').forEach(function(el) {
+                el.textContent = profileLen;
+            });
+
+            document.getElementById('resUD').textContent = udCount + ' шт.';
+            document.getElementById('resCD').textContent = cdCount + ' шт.';
+            document.getElementById('resHangers').textContent = hangers + ' шт.';
+            document.getElementById('resCrabs').textContent = crabs + ' шт.';
+            document.getElementById('resDowels').textContent = dowels + ' шт.';
+            document.getElementById('resScrewsGKL').textContent = screwsGKL + ' шт.';
+            document.getElementById('resScrewsMetal').textContent = screwsMetal + ' шт.';
+        }
+
+        document.getElementById('calcBtn').addEventListener('click', calculateDrywall);
+
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            var sheets = document.getElementById('resSheets').textContent;
+            var ud = document.getElementById('resUD').textContent;
+            var cd = document.getElementById('resCD').textContent;
+            var hangers = document.getElementById('resHangers').textContent;
+            var text = "Розрахунок гіпсокартону (БудКальк):\n- Листи ГКЛ: " + sheets + "\n- Профіль UD: " + ud + "\n- Профіль CD: " + cd + "\n- Підвіси: " + hangers;
+
+            var el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            var btn = this;
+            btn.textContent = '✅ Скопійовано!';
+            setTimeout(function() { btn.textContent = '📋 Скопіювати список'; }, 2000);
+        });
+
+        calculateDrywall();
+    </script>
+</body>
+</html>

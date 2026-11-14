@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор теплої підлоги онлайн — розрахунок потужності, кабелю та матів | БудКальк</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-container">
+            <a href="../index.html" class="logo"><span class="logo-icon">📐</span><span class="logo-text">Буд<span class="accent">Кальк</span></span></a>
+            <nav class="nav">
+                <a href="../index.html#stiny">Стіни та стеля</a>
+                <a href="../index.html#pidloga">Підлога</a>
+                <a href="../index.html#inzheneriya">Інженерія</a>
+                <a href="../index.html#zagalni">Загальні</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumbs"><a href="../index.html">Головна</a> &rarr; <a href="../index.html#pidloga">Підлога та облицювання</a> &rarr; <span>Тепла підлога</span></div>
+        <div class="page-header">
+            <h1>Калькулятор теплої підлоги</h1>
+            <p>Розрахуйте корисну площу обігріву, необхідну потужність та довжину кабелю, мату або труби.</p>
+        </div>
+
+        <div class="calc-wrapper">
+            <div class="calc-form-box">
+                <div class="form-section-title">1. Площа приміщення</div>
+                <div class="form-grid">
+                    <div class="form-group"><label for="totalArea">Загальна площа кімнати (м²)</label><input type="number" id="totalArea" value="12" step="0.5" min="1"></div>
+                    <div class="form-group"><label for="furnitureArea">Площа під меблями та сантехнікою (м²)</label><input type="number" id="furnitureArea" value="3.5" step="0.5" min="0"></div>
+                </div>
+
+                <div class="form-section-title">2. Призначення та тип системи</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="roomType">Тип приміщення (питома потужність)</label>
+                        <select id="roomType">
+                            <option value="130">Спальня / вітальня (комфорт, 130 Вт/м²)</option>
+                            <option value="150" selected>Кухня / коридор / ванна (150 Вт/м²)</option>
+                            <option value="180">Балкон / лоджія / 1-й поверх (180 Вт/м²)</option>
+                            <option value="200">Основне опалення без радіаторів (200 Вт/м²)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="floorSystem">Тип теплої підлоги</label>
+                        <select id="floorSystem">
+                            <option value="mat" selected>Нагрівальний мат під плитку</option>
+                            <option value="cable">Нагрівальний кабель у стяжку (18 Вт/м)</option>
+                            <option value="film">Інфрачервона плівка під ламінат</option>
+                            <option value="water">Водяна тепла підлога (крок 15 см)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-calc" id="calcBtn">Розрахувати теплу підлогу</button>
+            </div>
+
+            <div class="calc-result-box">
+                <div class="result-header">📊 Результат розрахунку</div>
+                <div class="result-main-card">
+                    <span id="resMainTitle">Необхідна потужність</span>
+                    <strong id="resPower">1275 Вт</strong>
+                    <span id="resSubNote">на корисну площу 8.5 м²</span>
+                </div>
+                <ul class="result-list">
+                    <li><span>Корисна площа обігріву:</span><strong id="resHeatArea">8.5 м²</strong></li>
+                    <li id="rowCable" style="display: none;"><span>Довжина нагрівального кабелю:</span><strong id="resCableLen">71 м</strong></li>
+                    <li id="rowStep" style="display: none;"><span>Рекомендований крок укладання:</span><strong id="resStep">12.0 см</strong></li>
+                    <li><span>Середнє споживання (з терморегулятором):</span><strong id="resConsumption">~0.45 кВт/год</strong></li>
+                </ul>
+                <button type="button" class="btn-copy" id="copyBtn">📋 Скопіювати розрахунок</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer"><div class="container"><p>&copy; 2026 БудКальк — Усі будівельні розрахунки в одному місці.</p></div></footer>
+
+    <script>
+        function calculateWarmFloor() {
+            var totalArea = parseFloat(document.getElementById('totalArea').value) || 0;
+            var furnArea = parseFloat(document.getElementById('furnitureArea').value) || 0;
+            var specificPower = parseFloat(document.getElementById('roomType').value) || 150;
+            var system = document.getElementById('floorSystem').value;
+
+            var heatArea = Math.max(0.5, totalArea - furnArea);
+            var totalPower = Math.round(heatArea * specificPower);
+            var avgConsumption = ((totalPower / 1000) * 0.35).toFixed(2);
+
+            var rowCable = document.getElementById('rowCable');
+            var rowStep = document.getElementById('rowStep');
+
+            if (system === 'water') {
+                var pipeLen = Math.ceil(heatArea * 6.7 + 10);
+                document.getElementById('resMainTitle').textContent = 'Довжина труби (крок 15 см)';
+                document.getElementById('resPower').textContent = pipeLen + ' м';
+                document.getElementById('resSubNote').textContent = 'для площі обігріву ' + heatArea.toFixed(1) + ' м²';
+                rowCable.style.display = 'none';
+                rowStep.style.display = 'flex';
+                document.getElementById('resStep').textContent = '15.0 см (1 контур до 80 м)';
+            } else if (system === 'cable') {
+                var cableLen = Math.ceil(totalPower / 18);
+                var stepCm = ((heatArea * 100) / cableLen).toFixed(1);
+                document.getElementById('resMainTitle').textContent = 'Необхідна потужність';
+                document.getElementById('resPower').textContent = totalPower + ' Вт';
+                document.getElementById('resSubNote').textContent = 'кабель ~' + cableLen + ' м (18 Вт/м)';
+                rowCable.style.display = 'flex';
+                rowStep.style.display = 'flex';
+                document.getElementById('resCableLen').textContent = cableLen + ' м';
+                document.getElementById('resStep').textContent = stepCm + ' см';
+            } else {
+                var matArea = (Math.floor(heatArea * 2) / 2).toFixed(1);
+                document.getElementById('resMainTitle').textContent = 'Необхідна потужність';
+                document.getElementById('resPower').textContent = totalPower + ' Вт';
+                document.getElementById('resSubNote').textContent = 'рекомендований мат/плівка: ' + matArea + ' м²';
+                rowCable.style.display = 'none';
+                rowStep.style.display = 'none';
+            }
+
+            document.getElementById('resHeatArea').textContent = heatArea.toFixed(1) + ' м²';
+            document.getElementById('resConsumption').textContent = system === 'water' ? 'від котла' : '~' + avgConsumption + ' кВт/год';
+        }
+
+        document.getElementById('roomType').addEventListener('change', calculateWarmFloor);
+        document.getElementById('floorSystem').addEventListener('change', calculateWarmFloor);
+        document.getElementById('calcBtn').addEventListener('click', calculateWarmFloor);
+
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            var title = document.getElementById('resMainTitle').textContent;
+            var mainVal = document.getElementById('resPower').textContent;
+            var sub = document.getElementById('resSubNote').textContent;
+            var text = "Розрахунок теплої підлоги (БудКальк):\n- " + title + ": " + mainVal + " (" + sub + ")";
+
+            var el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            var btn = this;
+            btn.textContent = '✅ Скопійовано!';
+            setTimeout(function() { btn.textContent = '📋 Скопіювати розрахунок'; }, 2000);
+        });
+
+        calculateWarmFloor();
+    </script>
+</body>
+</html>

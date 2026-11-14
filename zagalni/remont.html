@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор ремонту квартири під ключ онлайн | БудКальк</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-container">
+            <a href="../index.html" class="logo"><span class="logo-icon">📐</span><span class="logo-text">Буд<span class="accent">Кальк</span></span></a>
+            <nav class="nav">
+                <a href="../index.html#stiny">Стіни та стеля</a>
+                <a href="../index.html#pidloga">Підлога</a>
+                <a href="../index.html#inzheneriya">Інженерія</a>
+                <a href="../index.html#zagalni">Загальні</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumbs"><a href="../index.html">Головна</a> &rarr; <a href="../index.html#zagalni">Загальні розрахунки</a> &rarr; <span>Ремонт квартири під ключ</span></div>
+        <div class="page-header">
+            <h1>Калькулятор ремонту квартири під ключ</h1>
+            <p>Розрахуйте актуальну вартість ремонтних робіт та матеріалів за квадратний метр у доларах ($) та гривнях (грн).</p>
+        </div>
+
+        <div class="calc-wrapper">
+            <div class="calc-form-box">
+                <div class="form-section-title">1. Параметри квартири</div>
+                <div class="form-grid">
+                    <div class="form-group"><label for="area">Площа по підлозі (м²)</label><input type="number" id="area" value="55" step="1" min="10" max="500"></div>
+                    <div class="form-group">
+                        <label for="housingType">Тип житла</label>
+                        <select id="housingType">
+                            <option value="1.0" selected>Новобудова (від забудовника)</option>
+                            <option value="1.15">Вторинний ринок (демонтаж, +15%)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section-title">2. Клас ремонту та санвузли</div>
+                <div class="form-group">
+                    <label for="renoClass">Клас ремонту (базова ціна робіт за 1 м²)</label>
+                    <select id="renoClass">
+                        <option value="cosmetic">Косметичний — $150/м² (оновлення стін, стелі та підлоги)</option>
+                        <option value="capital" selected>Капітальний у новобудові — $300/м² (повний цикл під ключ)</option>
+                        <option value="design">Дизайнерський — $425/м² (складні вузли, інсталяції, тіньові шви)</option>
+                    </select>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="bathrooms">Кількість санвузлів</label>
+                        <select id="bathrooms">
+                            <option value="1" selected>1 санвузол</option>
+                            <option value="2">2 санвузли (+$1500 до робіт)</option>
+                            <option value="3">3 санвузли (+$3000 до робіт)</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label for="usdRate">Курс долара (грн / $)</label><input type="number" id="usdRate" value="41.5" step="0.1" min="20" max="100"></div>
+                </div>
+
+                <div class="form-group"><label for="reserve">Резерв на додаткові роботи та логістику (%)</label><input type="number" id="reserve" value="10" step="5" min="0" max="30"></div>
+
+                <button type="button" class="btn-calc" id="calcBtn">Розрахувати бюджет</button>
+            </div>
+
+            <div class="calc-result-box">
+                <div class="result-header">📊 Кошторис ремонту під ключ</div>
+                <div class="result-main-card">
+                    <span>Вартість робіт майстрів</span>
+                    <strong id="resWorkUsd">$18 150</strong>
+                    <span id="resWorkUah">~753 225 грн ($330/м² із резервом)</span>
+                </div>
+                <ul class="result-list">
+                    <li><span>Чорнові матеріали (суміші, електрика, труби):</span><strong id="resRough">$9 075 (~376 613 грн)</strong></li>
+                    <li><span>Чистові матеріали (плитка, ламінат, сантехніка):</span><strong id="resFinish">$12 100 (~502 150 грн)</strong></li>
+                    <li><span>Разом «під заселення» (роботи + всі матеріали):</span><strong id="resGrandTotal">$39 325 (~1 631 988 грн)</strong></li>
+                    <li><span>Орієнтовний термін ремонту:</span><strong id="resDuration">~2.2 — 3.1 міс.</strong></li>
+                </ul>
+                <button type="button" class="btn-copy" id="copyBtn">📋 Скопіювати кошторис</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer"><div class="container"><p>&copy; 2026 БудКальк — Усі будівельні розрахунки в одному місці.</p></div></footer>
+    <script src="../js/remont.js"></script>
+</body>
+</html>

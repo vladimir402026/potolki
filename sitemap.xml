@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://sitemaps.org">
+  <url><loc>https://netlify.app</loc><priority>1.0</priority></url>
+  
+  <!-- Стіни та стеля -->
+  <url><loc>https://netlify.appstiny/shpalery.html</loc><priority>0.8</priority></url>
+  <url><loc>https://netlify.appstiny/farba.html</loc><priority>0.8</priority></url>
+  <url><loc>https://netlify.appstiny/shtukaturka.html</loc><priority>0.8</priority></url>
+  <url><loc>https://netlify.appstiny/shpaklivka.html</loc><priority>0.8</priority></url>
+  <url><loc>https://netlify.appstiny/gipsokarton.html</loc><priority>0.8</priority></url>
+  <url><loc>https://netlify.appstiny/gruntovka.html</loc><priority>0.8</priority></url>
+
+  <!-- Підлога та облицювання -->
+  <url><loc>https://netlify.apppidloga/laminat.html</loc><priority>0.8</priority></url>
+  <url><loc>https://netlify.apppidloga/plytka.html</loc><priority>0.8</priority></url>
+  <url><loc>https://netlify.apppidloga/kley.html</loc><priority>0.8</priority></url>
+  <url><loc>https://netlify.apppidloga/styazhka.html</loc><priority>0.8</priority></url>
+  <url><loc>https://netlify.apppidloga/tepla-pidloga.html</loc><priority>0.8</priority></url>
+  <url><loc>https://netlify.apppidloga/linoleum.html</loc><priority>0.8</priority></url>
+
+  <!-- Інженерія -->
+  <url><loc>https://netlify.appinzheneriya/kabel.html</loc><priority>0.8</priority></url>
+  <url><loc>https://netlify.appinzheneriya/radiatory.html</loc><priority>0.8</priority></url>
+  <url><loc>https://netlify.appinzheneriya/kondytsioner.html</loc><priority>0.8</priority></url>
+
+  <!-- Загальні -->
+  <url><loc>https://netlify.appzagalni/remont.html</loc><priority>0.8</priority></url>
+  <url><loc>https://netlify.appzagalni/smittya.html</loc><priority>0.8</priority></url>
+</urlset>

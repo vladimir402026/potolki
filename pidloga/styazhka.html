@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор стяжки підлоги онлайн — розрахунок мішків суміші, цементу та піску | БудКальк</title>
+    <meta name="description" content="Точний онлайн-калькулятор стяжки для підлоги: розрахунок об'єму розчину в м³, кількості мішків готової суміші, цементу та піску.">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container header-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📐</span>
+                <span class="logo-text">Буд<span class="accent">Кальк</span></span>
+            </a>
+            <nav class="nav">
+                <a href="../index.html#stiny">Стіни та стеля</a>
+                <a href="../index.html#pidloga">Підлога</a>
+                <a href="../index.html#inzheneriya">Інженерія</a>
+                <a href="../index.html#zagalni">Загальні</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumbs">
+            <a href="../index.html">Головна</a> &rarr; 
+            <a href="../index.html#pidloga">Підлога та облицювання</a> &rarr; 
+            <span>Стяжка для підлоги</span>
+        </div>
+
+        <div class="page-header">
+            <h1>Калькулятор стяжки для підлоги</h1>
+            <p>Розрахуйте об'єм розчину, кількість мішків готової суміші або пропорцію цементу й піску для заливки підлоги.</p>
+        </div>
+
+        <div class="calc-wrapper">
+            
+            <!-- Ліва частина: Форма вводу -->
+            <div class="calc-form-box">
+                <div class="form-section-title">1. Параметри приміщення та шару</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="area">Площа підлоги (м²)</label>
+                        <input type="number" id="area" value="20" step="0.5" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="thickness">Середня товщина стяжки (мм)</label>
+                        <input type="number" id="thickness" value="40" step="1" min="2" max="200">
+                    </div>
+                </div>
+
+                <div class="form-section-title">2. Тип розчину та фасування</div>
+                <div class="form-group">
+                    <label for="screedType">Вид суміші (витрата на 1 мм шару)</label>
+                    <select id="screedType" onchange="updateScreed()">
+                        <option value="1.8|25" selected>Готова цементно-піщана суміш М150/М200 (~1.8 кг/м²)</option>
+                        <option value="1.6|25">Самовирівнювальна підлога / нівелірмаса (~1.6 кг/м²)</option>
+                        <option value="1.4|25">Полегшена стяжка з керамзитом/перлітом (~1.4 кг/м²)</option>
+                        <option value="1.9|50">Самозаміс: Цемент М400/М500 + Пісок 1:3 (~1.9 кг/м²)</option>
+                    </select>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="rate">Витрата суміші на 1 мм (кг/м²)</label>
+                        <input type="number" id="rate" value="1.8" step="0.05" min="0.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="bagWeight">Вага мішка (кг)</label>
+                        <select id="bagWeight" onchange="calculateScreed()">
+                            <option value="25" selected>25 кг (стандарт)</option>
+                            <option value="30">30 кг</option>
+                            <option value="40">40 кг</option>
+                            <option value="50">50 кг (цемент)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="reserve">Запас на перепади рівня підлоги (%)</label>
+                    <input type="number" id="reserve" value="5" step="1" min="0" max="30">
+                </div>
+
+                <button class="btn-calc" onclick="calculateScreed()">Розрахувати стяжку</button>
+            </div>
+
+            <!-- Права частина: Результати -->
+            <div class="calc-result-box">
+                <div class="result-header">📊 Результат розрахунку</div>
+                
+                <div class="result-main-card">
+                    <span>Необхідно готової суміші</span>
+                    <strong id="resBags">61 мішок</strong>
+                    <span id="resBagNote">по 25 кг (загальна вага 1512 кг)</span>
+                </div>
+
+                <ul class="result-list">
+                    <li>
+                        <span>Об'єм готового розчину:</span>
+                        <strong id="resVolume">0.84 м³</strong>
+                    </li>
+                    <li>
+                        <span>Загальна вага сухої суміші:</span>
+                        <strong id="resTotalWeight">1512 кг</strong>
+                    </li>
+                    <li>
+                        <span>Якщо мішати самому (Цемент 1:3):</span>
+                        <strong id="resCement">~380 кг (8 міш. по 50 кг)</strong>
+                    </li>
+                    <li>
+                        <span>Пісок річковий для самозамісу:</span>
+                        <strong id="resSand">~1135 кг (~0.75 м³)</strong>
+                    </li>
+                </ul>
+
+                <button class="btn-copy" id="copyBtn" onclick="copyResults()">📋 Скопіювати розрахунок</button>
+            </div>
+        </div>
+
+        <article class="seo-article">
+            <h2>Яку товщину стяжки вибрати для підлоги?</h2>
+            <p>Вибір матеріалу та товщини шару залежить від перепадів висоти перекриття та типу фінішного покриття:</p>
+            <ul>
+                <li><strong>Самовирівнювальна суміш (3–15 мм):</strong> ідеально підходить для фінішного вирівнювання старої стяжки перед укладанням ламінату, вінілу або лінолеуму.</li>
+                <li><strong>Цементно-піщана стяжка (30–80 мм):</strong> використовується для чорнового вирівнювання плит перекриття, приховування комунікацій та облаштування водяної теплої підлоги (мінімальний шар над трубою має бути не менше 30 мм).</li>
+                <li><strong>Демпферна стрічка:</strong> по всьому периметру кімнати обов'язково прокладайте демпферну стрічку товщиною 8–10 мм, щоб компенсувати теплове розширення стяжки.</li>
+            </ul>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 БудКальк — Усі будівельні розрахунки в одному місці.</p>
+        </div>
+    </footer>
+
+    <script>
+        function updateScreed() {
+            const parts = document.getElementById('screedType').value.split('|');
+            document.getElementById('rate').value = parts[0];
+            document.getElementById('bagWeight').value = parts[1];
+            calculateScreed();
+        }
+
+        function calculateScreed() {
+            const area = parseFloat(document.getElementById('area').value) || 0;
+            const thickness = parseFloat(document.getElementById('thickness').value) || 0;
+            const rate = parseFloat(document.getElementById('rate').value) || 1.8;
+            const bagWeight = parseFloat(document.getElementById('bagWeight').value) || 25;
+            const reserve = parseFloat(document.getElementById('reserve').value) || 0;
+
+            const volume = area * (thickness / 1000) * (1 + reserve / 100);
+            const totalWeight = area * thickness * rate * (1 + reserve / 100);
+            const bags = Math.ceil(totalWeight / bagWeight);
+
+            // Для самозамісу 1:3 (25% цементу, 75% піску)
+            const cementKg = Math.round(totalWeight * 0.25);
+            const cementBags50 = Math.ceil(cementKg / 50);
+            const sandKg = Math.round(totalWeight * 0.75);
+            const sandM3 = (sandKg / 1500).toFixed(2);
+
+            let bagWord = 'мішків';
+            if (bags === 1) bagWord = 'мішок';
+            else if (bags >= 2 && bags <= 4) bagWord = 'мішки';
+
+            document.getElementById('resBags').textContent = `${bags} ${bagWord}`;
+            document.getElementById('resBagNote').textContent = `по ${bagWeight} кг (загальна вага ${Math.round(totalWeight)} кг)`;
+            document.getElementById('resVolume').textContent = volume.toFixed(2) + ' м³';
+            document.getElementById('resTotalWeight').textContent = Math.round(totalWeight) + ' кг';
+            document.getElementById('resCement').textContent = `~${cementKg} кг (${cementBags50} міш. по 50 кг)`;
+            document.getElementById('resSand').textContent = `~${sandKg} кг (~${sandM3} м³)`;
+        }
+
+        function copyResults() {
+            const bags = document.getElementById('resBags').textContent;
+            const note = document.getElementById('resBagNote').textContent;
+            const vol = document.getElementById('resVolume').textContent;
+            const area = document.getElementById('area').value;
+            const thick = document.getElementById('thickness').value;
+
+            const text = `Розрахунок стяжки підлоги (БудКальк):\n- Потрібно: ${bags} ${note}\n- Об'єм розчину: ${vol}\n- Параметри: площа ${area} м², шар ${thick} мм`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Скопійовано в буфер!';
+                setTimeout(() => { btn.textContent = originalText; }, 2000);
+            });
+        }
+
+        window.onload = calculateScreed;
+    </script>
+</body>
+</html>

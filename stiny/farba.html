@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор розрахунку фарби онлайн — витрата в літрах на м² | БудКальк</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-container">
+            <a href="../index.html" class="logo"><span class="logo-icon">📐</span><span class="logo-text">Буд<span class="accent">Кальк</span></span></a>
+            <nav class="nav">
+                <a href="../index.html#stiny">Стіни та стеля</a>
+                <a href="../index.html#pidloga">Підлога</a>
+                <a href="../index.html#inzheneriya">Інженерія</a>
+                <a href="../index.html#zagalni">Загальні</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumbs"><a href="../index.html">Головна</a> &rarr; <a href="../index.html#stiny">Стіни та стеля</a> &rarr; <span>Розрахунок фарби</span></div>
+        <div class="page-header">
+            <h1>Калькулятор розрахунку фарби</h1>
+            <p>Дізнайтеся, скільки літрів фарби знадобиться для стін або стелі з урахуванням кількості шарів.</p>
+        </div>
+
+        <div class="calc-wrapper">
+            <div class="calc-form-box">
+                <div class="form-section-title">1. Спосіб розрахунку площі</div>
+                <div class="form-group">
+                    <label for="calcMode">Що будемо фарбувати?</label>
+                    <select id="calcMode">
+                        <option value="walls">Стіни по периметру кімнати</option>
+                        <option value="ceiling">Тільки стелю (довжина × ширина)</option>
+                        <option value="manual">Вказати точну площу вручну (м²)</option>
+                    </select>
+                </div>
+
+                <div id="roomDimensions">
+                    <div class="form-grid">
+                        <div class="form-group"><label for="roomLength">Довжина кімнати (м)</label><input type="number" id="roomLength" value="4.5" step="0.1" min="0.5"></div>
+                        <div class="form-group"><label for="roomWidth">Ширина кімнати (м)</label><input type="number" id="roomWidth" value="3.2" step="0.1" min="0.5"></div>
+                    </div>
+                    <div class="form-group" id="heightGroup"><label for="roomHeight">Висота стін (м)</label><input type="number" id="roomHeight" value="2.7" step="0.05" min="0.5"></div>
+                </div>
+
+                <div id="manualDimension" style="display: none;">
+                    <div class="form-group"><label for="manualArea">Загальна площа поверхні (м²)</label><input type="number" id="manualArea" value="40" step="0.5" min="1"></div>
+                </div>
+
+                <div id="openingsBlock">
+                    <div class="form-section-title">2. Вікна та двері</div>
+                    <div class="form-grid">
+                        <div class="form-group"><label for="winArea">Площа одного вікна (м²)</label><input type="number" id="winArea" value="2.1" step="0.1" min="0"></div>
+                        <div class="form-group"><label for="winCount">Кількість вікон (шт)</label><input type="number" id="winCount" value="1" step="1" min="0"></div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group"><label for="doorArea">Площа одних дверей (м²)</label><input type="number" id="doorArea" value="1.8" step="0.1" min="0"></div>
+                        <div class="form-group"><label for="doorCount">Кількість дверей (шт)</label><input type="number" id="doorCount" value="1" step="1" min="0"></div>
+                    </div>
+                </div>
+
+                <div class="form-section-title">3. Параметри фарби та поверхні</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="surfaceType">Тип поверхні</label>
+                        <select id="surfaceType">
+                            <option value="0.12">Гладка шпакльована стіна (~120 мл/м²)</option>
+                            <option value="0.15">Шпалери під фарбування (~150 мл/м²)</option>
+                            <option value="0.18">Фактурна штукатурка (~180 мл/м²)</option>
+                            <option value="0.22">Бетон / цегла / дерево (~220 мл/м²)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="layers">Кількість шарів</label>
+                        <select id="layers">
+                            <option value="1">1 шар (оновлення кольору)</option>
+                            <option value="2" selected>2 шари (стандарт)</option>
+                            <option value="3">3 шари (перекриття темного)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group"><label for="paintRate">Витрата на 1 шар (л/м²)</label><input type="number" id="paintRate" value="0.12" step="0.01" min="0.05"></div>
+                    <div class="form-group"><label for="reserve">Запас на втрати (%)</label><input type="number" id="reserve" value="10" step="1" min="0" max="50"></div>
+                </div>
+
+                <button type="button" class="btn-calc" id="calcBtn">Розрахувати фарбу</button>
+            </div>
+
+            <div class="calc-result-box">
+                <div class="result-header">📊 Результат розрахунку</div>
+                <div class="result-main-card">
+                    <span>Необхідний об'єм фарби</span>
+                    <strong id="resLiters">10.0 л</strong>
+                    <span id="resReserveNote">з урахуванням запасу 10%</span>
+                </div>
+                <ul class="result-list">
+                    <li><span>Чиста площа фарбування:</span><strong id="resArea">37.7 м²</strong></li>
+                    <li><span>Загальна площа (з шарами):</span><strong id="resTotalArea">75.4 м²</strong></li>
+                    <li><span>Без урахування запасу:</span><strong id="resCleanLiters">9.05 л</strong></li>
+                    <li><span>Орієнтовна вага (приблизно):</span><strong id="resWeight">13.5 кг</strong></li>
+                </ul>
+                <button type="button" class="btn-copy" id="copyBtn">📋 Скопіювати розрахунок</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer"><div class="container"><p>&copy; 2026 БудКальк — Усі будівельні розрахунки в одному місці.</p></div></footer>
+
+    <script>
+        function calculatePaint() {
+            var mode = document.getElementById('calcMode').value;
+            var cleanArea = 0;
+
+            if (mode === 'walls') {
+                var length = parseFloat(document.getElementById('roomLength').value) || 0;
+                var width = parseFloat(document.getElementById('roomWidth').value) || 0;
+                var height = parseFloat(document.getElementById('roomHeight').value) || 0;
+                var winArea = parseFloat(document.getElementById('winArea').value) || 0;
+                var winCount = parseInt(document.getElementById('winCount').value) || 0;
+                var doorArea = parseFloat(document.getElementById('doorArea').value) || 0;
+                var doorCount = parseInt(document.getElementById('doorCount').value) || 0;
+
+                var grossArea = (length + width) * 2 * height;
+                var openings = (winArea * winCount) + (doorArea * doorCount);
+                cleanArea = Math.max(0, grossArea - openings);
+            } else if (mode === 'ceiling') {
+                var l = parseFloat(document.getElementById('roomLength').value) || 0;
+                var w = parseFloat(document.getElementById('roomWidth').value) || 0;
+                cleanArea = l * w;
+            } else {
+                cleanArea = parseFloat(document.getElementById('manualArea').value) || 0;
+            }
+
+            var layers = parseInt(document.getElementById('layers').value) || 1;
+            var rate = parseFloat(document.getElementById('paintRate').value) || 0.12;
+            var reserve = parseFloat(document.getElementById('reserve').value) || 0;
+
+            var totalPaintArea = cleanArea * layers;
+            var cleanLiters = totalPaintArea * rate;
+            var totalLiters = cleanLiters * (1 + reserve / 100);
+            var approxWeight = totalLiters * 1.35;
+
+            document.getElementById('resLiters').textContent = (Math.ceil(totalLiters * 10) / 10) + ' л';
+            document.getElementById('resReserveNote').textContent = 'з урахуванням запасу ' + reserve + '%';
+            document.getElementById('resArea').textContent = cleanArea.toFixed(1) + ' м²';
+            document.getElementById('resTotalArea').textContent = totalPaintArea.toFixed(1) + ' м²';
+            document.getElementById('resCleanLiters').textContent = cleanLiters.toFixed(2) + ' л';
+            document.getElementById('resWeight').textContent = approxWeight.toFixed(1) + ' кг';
+        }
+
+        document.getElementById('calcMode').addEventListener('change', function() {
+            var mode = this.value;
+            document.getElementById('roomDimensions').style.display = (mode === 'walls' || mode === 'ceiling') ? 'block' : 'none';
+            document.getElementById('heightGroup').style.display = (mode === 'walls') ? 'flex' : 'none';
+            document.getElementById('manualDimension').style.display = (mode === 'manual') ? 'block' : 'none';
+            document.getElementById('openingsBlock').style.display = (mode === 'walls') ? 'block' : 'none';
+            calculatePaint();
+        });
+
+                document.getElementById('surfaceType').addEventListener('change', function() {
+            document.getElementById('paintRate').value = this.value;
+            calculatePaint();
+        });
+
+        document.getElementById('calcBtn').addEventListener('click', calculatePaint);
+
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            var liters = document.getElementById('resLiters').textContent;
+            var area = document.getElementById('resArea').textContent;
+            var layers = document.getElementById('layers').value;
+            var text = "Розрахунок фарби (БудКальк):\n- Потрібно фарби: " + liters + "\n- Площа поверхні: " + area + "\n- Кількість шарів: " + layers;
+
+            var el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            var btn = this;
+            btn.textContent = '✅ Скопійовано!';
+            setTimeout(function() { btn.textContent = '📋 Скопіювати розрахунок'; }, 2000);
+        });
+
+        calculatePaint();
+    </script>
+</body>
+</html>

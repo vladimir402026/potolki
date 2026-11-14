@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор ґрунтовки онлайн — розрахунок витрати в літрах на м² | БудКальк</title>
+    <meta name="description" content="Онлайн-калькулятор витрати ґрунтовки: точний розрахунок літрів та кількості каністр (5 або 10 л) залежно від типу поверхні та кількості шарів.">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container header-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📐</span>
+                <span class="logo-text">Буд<span class="accent">Кальк</span></span>
+            </a>
+            <nav class="nav">
+                <a href="../index.html#stiny">Стіни та стеля</a>
+                <a href="../index.html#pidloga">Підлога</a>
+                <a href="../index.html#inzheneriya">Інженерія</a>
+                <a href="../index.html#zagalni">Загальні</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumbs">
+            <a href="../index.html">Головна</a> &rarr; 
+            <a href="../index.html#stiny">Стіни та стеля</a> &rarr; 
+            <span>Розрахунок ґрунтовки</span>
+        </div>
+
+        <div class="page-header">
+            <h1>Калькулятор розрахунку ґрунтовки</h1>
+            <p>Визначте необхідний об'єм ґрунтовки в літрах та кількість каністр для обробки стін, стелі або підлоги.</p>
+        </div>
+
+        <div class="calc-wrapper">
+            
+            <!-- Ліва частина: Форма вводу -->
+            <div class="calc-form-box">
+                <div class="form-section-title">1. Параметри поверхні</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="area">Площа поверхні (м²)</label>
+                        <input type="number" id="area" value="50" step="1" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="layers">Кількість шарів</label>
+                        <select id="layers" onchange="calculatePrimer()">
+                            <option value="1" selected>1 шар (стандарт перед фінішем)</option>
+                            <option value="2">2 шари (для пористих поверхонь)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section-title">2. Тип основи та витрата</div>
+                <div class="form-group">
+                    <label for="surfaceType">Матеріал основи</label>
+                    <select id="surfaceType" onchange="updatePrimerRate()">
+                        <option value="0.10">Гіпсокартон / шпакльована стіна (~100 мл/м²)</option>
+                        <option value="0.15">Гіпсова або цементна штукатурка (~150 мл/м²)</option>
+                        <option value="0.20">Цегла / стяжка підлоги (~200 мл/м²)</option>
+                        <option value="0.25">Газоблок / піноблок (сильно поглинає, ~250 мл/м²)</option>
+                        <option value="0.30">Бетоноконтакт для гладкого бетону (~300 мл/м²)</option>
+                    </select>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="rate">Витрата на 1 шар (л/м²)</label>
+                        <input type="number" id="rate" value="0.10" step="0.01" min="0.05">
+                    </div>
+                    <div class="form-group">
+                        <label for="canVolume">Об'єм каністри (л)</label>
+                        <select id="canVolume" onchange="calculatePrimer()">
+                            <option value="10" selected>10 літрів</option>
+                            <option value="5">5 літрів</option>
+                            <option value="2">2 літри</option>
+                            <option value="1">1 літр</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="reserve">Запас (%)</label>
+                    <input type="number" id="reserve" value="5" step="1" min="0" max="30">
+                </div>
+
+                <button class="btn-calc" onclick="calculatePrimer()">Розрахувати ґрунтовку</button>
+            </div>
+
+            <!-- Права частина: Результати -->
+            <div class="calc-result-box">
+                <div class="result-header">📊 Результат розрахунку</div>
+                
+                <div class="result-main-card">
+                    <span>Необхідний об'єм</span>
+                    <strong id="resLiters">5.3 л</strong>
+                    <span id="resCansNote">це 1 каністра по 10 л</span>
+                </div>
+
+                <ul class="result-list">
+                    <li>
+                        <span>Кількість каністр (<span id="lblCanVol">10</span> л):</span>
+                        <strong id="resCans">1 шт.</strong>
+                    </li>
+                    <li>
+                        <span>Чистий об'єм (без запасу):</span>
+                        <strong id="resCleanLiters">5.0 л</strong>
+                    </li>
+                    <li>
+                        <span>Загальна площа обробки:</span>
+                        <strong id="resTotalArea">50 м²</strong>
+                    </li>
+                </ul>
+
+                <button class="btn-copy" id="copyBtn" onclick="copyResults()">📋 Скопіювати розрахунок</button>
+            </div>
+        </div>
+
+        <article class="seo-article">
+            <h2>Навіщо ґрунтувати стіни та як зменшити витрату?</h2>
+            <p>Ґрунтовка зв'язує дрібний будівельний пил, зміцнює пухку основу та вирівнює поглинальну здатність стіни, завдяки чому клей або фарба лягають рівномірно і не пересихають завчасно.</p>
+            <ul>
+                <li><strong>Правило другого шару:</strong> якщо ґрунтувати у два шари, витрата на другий прохід зазвичай на 25–30% менша, ніж на перший.</li>
+                <li><strong>Бетоноконтакт:</strong> для щільного монолітного бетону звичайна рідка ґрунтовка не підходить — використовуйте спеціальний адгезійний ґрунт з кварцовим піском (витрата близько 0.25–0.35 кг/м²).</li>
+            </ul>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 БудКальк — Усі будівельні розрахунки в одному місці.</p>
+        </div>
+    </footer>
+
+    <script>
+        function updatePrimerRate() {
+            const val = document.getElementById('surfaceType').value;
+            document.getElementById('rate').value = val;
+            calculatePrimer();
+        }
+
+        function calculatePrimer() {
+            const area = parseFloat(document.getElementById('area').value) || 0;
+            const layers = parseInt(document.getElementById('layers').value) || 1;
+            const rate = parseFloat(document.getElementById('rate').value) || 0.1;
+            const canVol = parseFloat(document.getElementById('canVolume').value) || 10;
+            const reserve = parseFloat(document.getElementById('reserve').value) || 0;
+
+            const totalArea = area * layers;
+            const cleanLiters = totalArea * rate;
+            const totalLiters = cleanLiters * (1 + reserve / 100);
+            const cans = Math.ceil(totalLiters / canVol);
+
+            document.getElementById('resLiters').textContent = (Math.ceil(totalLiters * 10) / 10) + ' л';
+            document.getElementById('resCansNote').textContent = `це ${cans} каністр(а) по ${canVol} л`;
+            document.getElementById('lblCanVol').textContent = canVol;
+            document.getElementById('resCans').textContent = cans + ' шт.';
+            document.getElementById('resCleanLiters').textContent = cleanLiters.toFixed(1) + ' л';
+            document.getElementById('resTotalArea').textContent = totalArea.toFixed(1) + ' м²';
+        }
+
+        function copyResults() {
+            const liters = document.getElementById('resLiters').textContent;
+            const cans = document.getElementById('resCans').textContent;
+            const canVol = document.getElementById('canVolume').value;
+            const area = document.getElementById('area').value;
+
+            const text = `Розрахунок ґрунтовки (БудКальк):\n- Потрібно об'єму: ${liters} (${cans} по ${canVol} л)\n- Площа: ${area} м²`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Скопійовано в буфер!';
+                setTimeout(() => { btn.textContent = originalText; }, 2000);
+            });
+        }
+
+        window.onload = calculatePrimer;
+    </script>
+</body>
+</html>

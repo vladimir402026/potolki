@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор потужності кондиціонера онлайн — підбір спліт-системи в кВт та BTU | БудКальк</title>
+    <meta name="description" content="Онлайн-калькулятор підбору кондиціонера за площею кімнати, висотою стелі, сонячною стороною, кількістю людей та побутової техніки.">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container header-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📐</span>
+                <span class="logo-text">Буд<span class="accent">Кальк</span></span>
+            </a>
+            <nav class="nav">
+                <a href="../index.html#stiny">Стіни та стеля</a>
+                <a href="../index.html#pidloga">Підлога</a>
+                <a href="../index.html#inzheneriya">Інженерія</a>
+                <a href="../index.html#zagalni">Загальні</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumbs">
+            <a href="../index.html">Головна</a> &rarr; 
+            <a href="../index.html#inzheneriya">Інженерія, електрика та клімат</a> &rarr; 
+            <span>Потужність кондиціонера</span>
+        </div>
+
+        <div class="page-header">
+            <h1>Калькулятор потужності кондиціонера</h1>
+            <p>Розрахуйте необхідну потужність охолодження (кВт) та підберіть відповідний типорозмір спліт-системи (BTU).</p>
+        </div>
+
+        <div class="calc-wrapper">
+            
+            <!-- Ліва частина: Форма вводу -->
+            <div class="calc-form-box">
+                <div class="form-section-title">1. Розміри та освітленість кімнати</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="area">Площа кімнати (м²)</label>
+                        <input type="number" id="area" value="22" step="0.5" min="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Висота стелі (м)</label>
+                        <input type="number" id="height" value="2.7" step="0.1" min="2" max="5">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="sunlight">Освітленість вікон сонцем</label>
+                    <select id="sunlight" onchange="calculateAC()">
+                        <option value="30">Слабка — північна сторона, затінення деревами (30 Вт/м³)</option>
+                        <option value="35" selected>Середня — східна або західна сторона (35 Вт/м³)</option>
+                        <option value="40">Сильна — південна сторона, панорамні вікна, останній поверх (40 Вт/м³)</option>
+                    </select>
+                </div>
+
+                <div class="form-section-title">2. Додаткові джерела тепла</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="people">Кількість людей у кімнаті (постійно)</label>
+                        <input type="number" id="people" value="2" step="1" min="0" max="20">
+                    </div>
+                    <div class="form-group">
+                        <label for="computers">Комп'ютери / телевізори (шт)</label>
+                        <input type="number" id="computers" value="1" step="1" min="0" max="15">
+                    </div>
+                </div>
+
+                <button class="btn-calc" onclick="calculateAC()">Розрахувати кондиціонер</button>
+            </div>
+
+            <!-- Права частина: Результати -->
+            <div class="calc-result-box">
+                <div class="result-header">📊 Результат розрахунку</div>
+                
+                <div class="result-main-card">
+                    <span>Рекомендована модель</span>
+                    <strong id="resBtu">«09» (9000 BTU)</strong>
+                    <span id="resModelNote">потужність охолодження ~2.6 кВт</span>
+                </div>
+
+                <ul class="result-list">
+                    <li>
+                        <span>Розрахункове теплонадходження (Q):</span>
+                        <strong id="resCalcKw">2.48 кВт</strong>
+                    </li>
+                    <li>
+                        <span>Тепло від приміщення (Q1):</span>
+                        <strong id="resQ1">2.08 кВт</strong>
+                    </li>
+                    <li>
+                        <span>Тепло від людей та техніки (Q2 + Q3):</span>
+                        <strong id="resQ23">0.40 кВт</strong>
+                    </li>
+                    <li>
+                        <span>Рекомендований діапазон потужності:</span>
+                        <strong id="resRange">2.36 — 2.85 кВт</strong>
+                    </li>
+                </ul>
+
+                <button class="btn-copy" id="copyBtn" onclick="copyResults()">📋 Скопіювати розрахунок</button>
+            </div>
+        </div>
+
+        <article class="seo-article">
+            <h2>Що означають цифри «07», «09», «12» у назві кондиціонера?</h2>
+            <p>Маркування побутових кондиціонерів вказується у британських теплових одиницях — <strong>BTU</strong> (1000 BTU ≈ 0.293 кВт):</p>
+            <ul>
+                <li><strong>«07» (7000 BTU ≈ 2.1 кВт):</strong> розрахований на невеликі спальні та дитячі кімнати площею до 18–20 м².</li>
+                <li><strong>«09» (9000 BTU ≈ 2.6 кВт):</strong> найпопулярніший типорозмір для кімнат площею 20–27 м².</li>
+                <li><strong>«12» (12000 BTU ≈ 3.5 кВт):</strong> підходить для просторих віталень, кухонь-студій та офісів площею 28–36 м².</li>
+                <li><strong>«18» (18000 BTU ≈ 5.3 кВт) та «24» (24000 BTU ≈ 7.0 кВт):</strong> потужні моделі для великих приміщень від 40 до 70 м².</li>
+            </ul>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 БудКальк — Усі будівельні розрахунки в одному місці.</p>
+        </div>
+    </footer>
+
+    <script>
+        function calculateAC() {
+            const area = parseFloat(document.getElementById('area').value) || 0;
+            const height = parseFloat(document.getElementById('height').value) || 2.7;
+            const qCoef = parseFloat(document.getElementById('sunlight').value) || 35;
+            const people = parseInt(document.getElementById('people').value) || 0;
+            const computers = parseInt(document.getElementById('computers').value) || 0;
+
+            // Q1: об'єм * коефіцієнт освітленості (Вт -> кВт)
+            const q1 = (area * height * qCoef) / 1000;
+            // Q2: ~0.1 кВт на 1 людину в спокійному стані
+            const q2 = people * 0.1;
+            // Q3: ~0.2 кВт на ПК/ТВ
+            const q3 = computers * 0.2;
+
+            const totalKw = q1 + q2 + q3;
+            const minKw = totalKw * 0.95;
+            const maxKw = totalKw * 1.15;
+
+            // Підбір стандартного типорозміру BTU
+            let btuLabel = '«07» (7000 BTU)';
+            let nominalKw = '2.1 кВт';
+
+            if (totalKw <= 2.2) {
+                btuLabel = '«07» (7000 BTU)';
+                nominalKw = '2.0 — 2.2 кВт';
+            } else if (totalKw <= 2.8) {
+                btuLabel = '«09» (9000 BTU)';
+                nominalKw = '2.5 — 2.8 кВт';
+            } else if (totalKw <= 3.7) {
+                btuLabel = '«12» (12000 BTU)';
+                nominalKw = '3.2 — 3.6 кВт';
+            } else if (totalKw <= 5.5) {
+                btuLabel = '«18» (18000 BTU)';
+                nominalKw = '5.0 — 5.4 кВт';
+            } else if (totalKw <= 7.3) {
+                btuLabel = '«24» (24000 BTU)';
+                nominalKw = '6.8 — 7.2 кВт';
+            } else {
+                btuLabel = '«30» або «36» (від 9 кВт)';
+                nominalKw = `${totalKw.toFixed(1)} кВт`;
+            }
+
+            document.getElementById('resBtu').textContent = btuLabel;
+            document.getElementById('resModelNote').textContent = `потужність охолодження ${nominalKw}`;
+            document.getElementById('resCalcKw').textContent = `${totalKw.toFixed(2)} кВт`;
+            document.getElementById('resQ1').textContent = `${q1.toFixed(2)} кВт`;
+            document.getElementById('resQ23').textContent = `${(q2 + q3).toFixed(2)} кВт`;
+            document.getElementById('resRange').textContent = `${minKw.toFixed(2)} — ${maxKw.toFixed(2)} кВт`;
+        }
+
+        function copyResults() {
+            const btu = document.getElementById('resBtu').textContent;
+            const calc = document.getElementById('resCalcKw').textContent;
+            const area = document.getElementById('area').value;
+
+            const text = `Розрахунок кондиціонера (БудКальк):\n- Рекомендована модель: ${btu}\n- Розрахункова потужність: ${calc}\n- Площа кімнати: ${area} м²`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Скопійовано в буфер!';
+                setTimeout(() => { btn.textContent = originalText; }, 2000);
+            });
+        }
+
+        window.onload = calculateAC;
+    </script>
+</body>
+</html>

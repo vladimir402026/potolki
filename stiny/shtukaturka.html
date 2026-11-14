@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор штукатурки онлайн — розрахунок мішків гіпсової та цементної суміші | БудКальк</title>
+    <meta name="description" content="Онлайн-калькулятор витрати штукатурки на м²: точний підрахунок ваги суміші та кількості мішків (25/30 кг) залежно від середньої товщини шару.">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container header-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📐</span>
+                <span class="logo-text">Буд<span class="accent">Кальк</span></span>
+            </a>
+            <nav class="nav">
+                <a href="../index.html#stiny">Стіни та стеля</a>
+                <a href="../index.html#pidloga">Підлога</a>
+                <a href="../index.html#inzheneriya">Інженерія</a>
+                <a href="../index.html#zagalni">Загальні</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumbs">
+            <a href="../index.html">Головна</a> &rarr; 
+            <a href="../index.html#stiny">Стіни та стеля</a> &rarr; 
+            <span>Розрахунок штукатурки</span>
+        </div>
+
+        <div class="page-header">
+            <h1>Калькулятор розрахунку штукатурки</h1>
+            <p>Розрахуйте вагу сухої суміші та кількість мішків для вирівнювання стін або стелі.</p>
+        </div>
+
+        <div class="calc-wrapper">
+            
+            <!-- Ліва частина: Форма вводу -->
+            <div class="calc-form-box">
+                <div class="form-section-title">1. Параметри поверхні</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="area">Площа стін/стелі (м²)</label>
+                        <input type="number" id="area" value="35" step="0.5" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="thickness">Середня товщина шару (мм)</label>
+                        <input type="number" id="thickness" value="15" step="1" min="2" max="100">
+                    </div>
+                </div>
+
+                <div class="form-section-title">2. Тип суміші та фасування</div>
+                <div class="form-group">
+                    <label for="mixType">Тип штукатурки (витрата на 1 мм шару)</label>
+                    <select id="mixType" onchange="updateMix()">
+                        <option value="0.85|30">Гіпсова (напр. Knauf Rotband) — ~0.85 кг/м²</option>
+                        <option value="1.0|30">Гіпсова стандартна — ~1.0 кг/м²</option>
+                        <option value="1.6|25">Цементно-піщана (ЦПШ) — ~1.6 кг/м²</option>
+                        <option value="1.4|25">Вапняно-цементна — ~1.4 кг/м²</option>
+                        <option value="0.9|25">Теплоізоляційна (перлітова) — ~0.9 кг/м²</option>
+                    </select>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="mixRate">Витрата на 1 мм шару (кг/м²)</label>
+                        <input type="number" id="mixRate" value="0.85" step="0.05" min="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="bagWeight">Вага одного мішка (кг)</label>
+                        <select id="bagWeight" onchange="calculatePlaster()">
+                            <option value="30" selected>30 кг (стандарт для гіпсової)</option>
+                            <option value="25">25 кг (стандарт для цементної)</option>
+                            <option value="40">40 кг</option>
+                            <option value="50">50 кг</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="reserve">Запас на нерівності стін (%)</label>
+                    <input type="number" id="reserve" value="10" step="1" min="0" max="50">
+                </div>
+
+                <button class="btn-calc" onclick="calculatePlaster()">Розрахувати штукатурку</button>
+            </div>
+
+            <!-- Права частина: Результати -->
+            <div class="calc-result-box">
+                <div class="result-header">📊 Результат розрахунку</div>
+                
+                <div class="result-main-card">
+                    <span>Необхідно придбати</span>
+                    <strong id="resBags">17 мішків</strong>
+                    <span id="resBagNote">фасування по 30 кг (із запасом)</span>
+                </div>
+
+                <ul class="result-list">
+                    <li>
+                        <span>Загальна вага (із запасом):</span>
+                        <strong id="resTotalWeight">490.9 кг</strong>
+                    </li>
+                    <li>
+                        <span>Чиста вага (без запасу):</span>
+                        <strong id="resCleanWeight">446.3 кг</strong>
+                    </li>
+                    <li>
+                        <span>Витрата на 1 м² при шарі <span id="lblThick">15</span> мм:</span>
+                        <strong id="resPerSqm">12.75 кг/м²</strong>
+                    </li>
+                    <li>
+                        <span>Орієнтовно води для замісу:</span>
+                        <strong id="resWater">~270 л</strong>
+                    </li>
+                </ul>
+
+                <button class="btn-copy" id="copyBtn" onclick="copyResults()">📋 Скопіювати розрахунок</button>
+            </div>
+        </div>
+
+        <article class="seo-article">
+            <h2>Як визначити середню товщину шару штукатурки?</h2>
+            <p>Головна помилка при купівлі штукатурки — рахувати витрату за мінімальною товщиною маяка (6 мм). На практиці стіни мають завали по вертикалі та западини.</p>
+            <ul>
+                <li><strong>Правило 3 точок:</strong> виміряйте відхилення стіни правилом або рівнем у 3–5 місцях. Якщо в одному куті шар 6 мм, а в іншому 24 мм, середня товщина становить <strong>(6 + 24) / 2 = 15 мм</strong>.</li>
+                <li><strong>Гіпсова чи цементна:</strong> гіпсова штукатурка майже вдвічі легша та економічніша (0.85–1.0 кг на 1 мм шару), але підходить лише для сухих приміщень. Для ванної кімнати, підвалу та фасаду використовуйте цементні суміші.</li>
+            </ul>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 БудКальк — Усі будівельні розрахунки в одному місці.</p>
+        </div>
+    </footer>
+
+    <script>
+        function updateMix() {
+            const val = document.getElementById('mixType').value.split('|');
+            document.getElementById('mixRate').value = val[0];
+            document.getElementById('bagWeight').value = val[1];
+            calculatePlaster();
+        }
+
+        function calculatePlaster() {
+            const area = parseFloat(document.getElementById('area').value) || 0;
+            const thickness = parseFloat(document.getElementById('thickness').value) || 0;
+            const rate = parseFloat(document.getElementById('mixRate').value) || 0.85;
+            const bagWeight = parseFloat(document.getElementById('bagWeight').value) || 30;
+            const reserve = parseFloat(document.getElementById('reserve').value) || 0;
+
+            const perSqm = rate * thickness;
+            const cleanWeight = area * perSqm;
+            const totalWeight = cleanWeight * (1 + reserve / 100);
+            const bags = Math.ceil(totalWeight / bagWeight);
+
+            // Орієнтовно 0.55 л води на 1 кг гіпсової та 0.25 л для цементної
+            const waterRatio = rate < 1.2 ? 0.55 : 0.25;
+            const water = Math.round(totalWeight * waterRatio);
+
+            document.getElementById('resBags').textContent = bags + ' мішків';
+            document.getElementById('resBagNote').textContent = `фасування по ${bagWeight} кг (із запасом ${reserve}%)`;
+            document.getElementById('resTotalWeight').textContent = totalWeight.toFixed(1) + ' кг';
+            document.getElementById('resCleanWeight').textContent = cleanWeight.toFixed(1) + ' кг';
+            document.getElementById('lblThick').textContent = thickness;
+            document.getElementById('resPerSqm').textContent = perSqm.toFixed(2) + ' кг/м²';
+            document.getElementById('resWater').textContent = '~' + water + ' л';
+        }
+
+        function copyResults() {
+            const bags = document.getElementById('resBags').textContent;
+            const weight = document.getElementById('resTotalWeight').textContent;
+            const area = document.getElementById('area').value;
+            const thick = document.getElementById('thickness').value;
+
+            const text = `Розрахунок штукатурки (БудКальк):\n- Потрібно: ${bags} (${weight})\n- Площа: ${area} м², середній шар: ${thick} мм`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Скопійовано в буфер!';
+                setTimeout(() => { btn.textContent = originalText; }, 2000);
+            });
+        }
+
+        window.onload = calculatePlaster;
+    </script>
+</body>
+</html>

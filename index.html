@@ -1,152 +1,197 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Калькулятор натяжных потолков</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f1f5f9; color: #1e293b; margin: 0; padding: 20px; }
-        .box { max-width: 600px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-        h2 { text-align: center; color: #2563eb; margin-top: 0; font-size: 22px; }
-        h3 { font-size: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px; color: #475569; margin-top: 20px; }
-        .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 12px; }
-        label { font-size: 14px; flex: 1; }
-        input, select { width: 120px; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 15px; text-align: right; }
-        select { width: 185px; text-align: left; }
-        .res { background: #eff6ff; border: 2px solid #bfdbfe; padding: 18px; border-radius: 10px; text-align: center; margin-top: 20px; }
-        .sum { font-size: 32px; font-weight: bold; color: #2563eb; margin-top: 5px; }
-        button { width: 100%; padding: 13px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .b-calc { background: #16a34a; color: #fff; }
-        .b-copy { background: #2563eb; color: #fff; }
-        .b-clr { background: #f8fafc; color: #64748b; border: 1px solid #cbd5e1; }
-        details { background: #f8fafc; padding: 12px 15px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 18px; }
-        summary { font-weight: bold; font-size: 14px; cursor: pointer; text-align: center; color: #334155; }
-    </style>
+    <title>БудКалькулятор — Точний розрахунок матеріалів для ремонту та будівництва</title>
+    <meta name="description" content="Безкоштовні будівельні онлайн-калькулятори: розрахунок шпалер, ламінату, плитки, штукатурки, стяжки, перерізу кабелю та вартості ремонту.">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="box">
-    <h2>Калькулятор потолков</h2>
 
-    <details>
-        <summary>⚙️ Настроить мои цены (нажмите здесь)</summary>
-        <h3>Прайс (работа + материал)</h3>
-        <div class="row"><label>ПВХ Стандарт (м²):</label><input type="number" id="p_pvc" value="550" oninput="calc()"></div>
-        <div class="row"><label>ПВХ Премиум (м²):</label><input type="number" id="p_prem" value="850" oninput="calc()"></div>
-        <div class="row"><label>Ткань (м²):</label><input type="number" id="p_fab" value="2100" oninput="calc()"></div>
-        <div class="row"><label>Профиль обычный (м.п.):</label><input type="number" id="p_pstd" value="150" oninput="calc()"></div>
-        <div class="row"><label>Профиль теневой/парящий (м.п.):</label><input type="number" id="p_pshad" value="550" oninput="calc()"></div>
-        <div class="row"><label>Вставка (м.п.):</label><input type="number" id="p_ins" value="100" oninput="calc()"></div>
-        <div class="row"><label>Доп. угол > 4 (шт):</label><input type="number" id="p_cor" value="150" oninput="calc()"></div>
-        <div class="row"><label>Точечный свет (шт):</label><input type="number" id="p_spot" value="450" oninput="calc()"></div>
-        <div class="row"><label>Люстра (шт):</label><input type="number" id="p_chan" value="650" oninput="calc()"></div>
-        <div class="row"><label>Световая линия/трек (м.п.):</label><input type="number" id="p_line" value="2200" oninput="calc()"></div>
-        <div class="row"><label>Карниз/ниша (м.п.):</label><input type="number" id="p_curt" value="2600" oninput="calc()"></div>
-        <div class="row"><label>Обвод трубы (шт):</label><input type="number" id="p_pipe" value="400" oninput="calc()"></div>
-        <div class="row"><label>Керамогранит (м.п.):</label><input type="number" id="p_tile" value="450" oninput="calc()"></div>
-        <div class="row"><label>Валюта:</label><input type="text" id="p_curr" value="грн" oninput="calc()"></div>
-    </details>
+    <!-- Шапка сайту -->
+    <header class="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">📐</span>
+                <span class="logo-text">Буд<span class="accent">Кальк</span></span>
+            </a>
+            <nav class="nav">
+                <a href="#stiny">Стіни та стеля</a>
+                <a href="#pidloga">Підлога</a>
+                <a href="#inzheneriya">Інженерія</a>
+                <a href="#zagalni">Загальні</a>
+            </nav>
+        </div>
+    </header>
 
-    <h3>1. Полотно и профиль</h3>
-    <div class="row"><label>Полотно:</label><select id="mat" onchange="calc()"><option value="pvc">ПВХ Стандарт</option><option value="prem">ПВХ Премиум</option><option value="fab">Ткань</option></select></div>
-    <div class="row"><label>Площадь (м²):</label><input type="number" id="area" value="0" min="0" step="0.1" oninput="calc()"></div>
-    <div class="row"><label>Периметр (м.п.):</label><input type="number" id="perim" value="0" min="0" step="0.1" oninput="calc()"></div>
-    <div class="row"><label>Профиль:</label><select id="prof" onchange="calc()"><option value="pstd">Обычный</option><option value="pshad">Теневой / Парящий</option></select></div>
-    <div class="row"><label>Вставка (м.п.):</label><input type="number" id="ins" value="0" min="0" step="0.1" oninput="calc()"></div>
+    <!-- Головний екран (Hero) -->
+    <section class="hero">
+        <div class="container">
+            <h1>Онлайн-калькулятори для ремонту та будівництва</h1>
+            <p class="hero-subtitle">Розрахуйте точну кількість матеріалів за лічені секунди, щоб не переплачувати за зайве та не їздити в магазин двічі.</p>
+            
+            <!-- Швидкий пошук по калькуляторах -->
+            <div class="search-box">
+                <input type="text" id="calcSearch" placeholder="Пошук калькулятора (наприклад: ламінат, шпалери, кабель)...">
+            </div>
+        </div>
+    </section>
 
-    <h3>2. Свет и карнизы</h3>
-    <div class="row"><label>Точечные светильники (шт):</label><input type="number" id="spot" value="0" min="0" oninput="calc()"></div>
-    <div class="row"><label>Люстры (шт):</label><input type="number" id="chan" value="0" min="0" oninput="calc()"></div>
-    <div class="row"><label>Световые линии / треки (м.п.):</label><input type="number" id="line" value="0" min="0" step="0.1" oninput="calc()"></div>
-    <div class="row"><label>Карниз / ниша (м.п.):</label><input type="number" id="curt" value="0" min="0" step="0.1" oninput="calc()"></div>
+    <!-- Основний контент зі списком калькуляторів -->
+    <main class="container main-content">
 
-    <h3>3. Сложности и допы</h3>
-    <div class="row"><label>Всего углов (первые 4 беспл.):</label><input type="number" id="cor" value="4" min="0" oninput="calc()"></div>
-    <div class="row"><label>Обвод труб (шт):</label><input type="number" id="pipe" value="0" min="0" oninput="calc()"></div>
-    <div class="row"><label>Керамогранит (м.п.):</label><input type="number" id="tile" value="0" min="0" step="0.1" oninput="calc()"></div>
-    <div class="row"><label>Доп. расходы / выезд:</label><input type="number" id="ext" value="0" min="0" oninput="calc()"></div>
+        <!-- Категорія 1: Стіни та стеля -->
+        <section id="stiny" class="category-section">
+            <h2 class="category-title">🧱 Стіни та стеля</h2>
+            <div class="cards-grid">
+                <a href="stiny/shpalery.html" class="calc-card">
+                    <div class="card-icon">📜</div>
+                    <h3>Калькулятор шпалер</h3>
+                    <p>Розрахунок кількості рулонів з урахуванням висоти стелі, підгону малюнка (рапорту) та прорізів.</p>
+                </a>
+                <a href="stiny/farba.html" class="calc-card">
+                    <div class="card-icon">🎨</div>
+                    <h3>Розрахунок фарби</h3>
+                    <p>Визначення об'єму в літрах залежно від площі, кількості шарів та типу поверхні.</p>
+                </a>
+                <a href="stiny/shtukaturka.html" class="calc-card">
+                    <div class="card-icon">🪣</div>
+                    <h3>Розрахунок штукатурки</h3>
+                    <p>Підрахунок мішків гіпсової або цементної суміші за середньою товщиною шару.</p>
+                </a>
+                <a href="stiny/shpaklivka.html" class="calc-card">
+                    <div class="card-icon">🔪</div>
+                    <h3>Розрахунок шпаклівки</h3>
+                    <p>Витрата стартової та фінішної шпаклівки для вирівнювання стін і стелі.</p>
+                </a>
+                <a href="stiny/gipsokarton.html" class="calc-card">
+                    <div class="card-icon">📐</div>
+                    <h3>Калькулятор гіпсокартону</h3>
+                    <p>Кількість листів ГКЛ, профілів UD/CD, підвісів, крабів та саморізів.</p>
+                </a>
+                <a href="stiny/gruntovka.html" class="calc-card">
+                    <div class="card-icon">💧</div>
+                    <h3>Розрахунок ґрунтовки</h3>
+                    <p>Об'єм рідини в літрах з урахуванням поглинання основи та кількості шарів.</p>
+                </a>
+            </div>
+        </section>
 
-    <button type="button" class="b-calc" onclick="calc()">🔄 Рассчитать стоимость</button>
+        <!-- Категорія 2: Підлога та облицювання -->
+        <section id="pidloga" class="category-section">
+            <h2 class="category-title">🪵 Підлога та облицювання</h2>
+            <div class="cards-grid">
+                <a href="pidloga/laminat.html" class="calc-card">
+                    <div class="card-icon"> planks </div>
+                    <h3>Калькулятор ламінату</h3>
+                    <p>Кількість упаковок і дощок при прямому або діагональному способі укладання.</p>
+                </a>
+                <a href="pidloga/plytka.html" class="calc-card">
+                    <div class="card-icon">🔲</div>
+                    <h3>Керамічна плитка</h3>
+                    <p>Розрахунок штук та м² з урахуванням розміру плитки, швів та запасу на підрізку.</p>
+                </a>
+                <a href="pidloga/kley.html" class="calc-card">
+                    <div class="card-icon">🧱</div>
+                    <h3>Плитковий клей</h3>
+                    <p>Вага сухої суміші та кількість мішків залежно від розміру плитки і шпателя.</p>
+                </a>
+                <a href="pidloga/styazhka.html" class="calc-card">
+                    <div class="card-icon">🏗️</div>
+                    <h3>Стяжка для підлоги</h3>
+                    <p>Об'єм розчину або кількість мішків готової суміші за заданою товщиною.</p>
+                </a>
+                <a href="pidloga/tepla-pidloga.html" class="calc-card">
+                    <div class="card-icon">🔥</div>
+                    <h3>Тепла підлога</h3>
+                    <p>Розрахунок довжини нагрівального кабелю, площі матів та потужності системи.</p>
+                </a>
+                <a href="pidloga/linoleum.html" class="calc-card">
+                    <div class="card-icon">📏</div>
+                    <h3>Лінолеум та плінтуси</h3>
+                    <p>Підбір оптимальної ширини рулону та підрахунок погонних метрів плінтуса.</p>
+                </a>
+            </div>
+        </section>
 
-    <div class="res">
-        <div>Итоговая стоимость:</div>
-        <div class="sum" id="tot">0 грн</div>
-    </div>
+        <!-- Категорія 3: Інженерія, електрика та сантехніка -->
+        <section id="inzheneriya" class="category-section">
+            <h2 class="category-title">⚡ Інженерія, електрика та клімат</h2>
+            <div class="cards-grid">
+                <a href="inzheneriya/kabel.html" class="calc-card">
+                    <div class="card-icon">🔌</div>
+                    <h3>Переріз кабелю</h3>
+                    <p>Підбір товщини мідної або алюмінієвої жили за потужністю приладів та напругою.</p>
+                </a>
+                <a href="inzheneriya/radiatory.html" class="calc-card">
+                    <div class="card-icon">♨️</div>
+                    <h3>Радіатори опалення</h3>
+                    <p>Розрахунок теплової потужності та кількості секцій батарей для кімнати.</p>
+                </a>
+                <a href="inzheneriya/kondytsioner.html" class="calc-card">
+                    <div class="card-icon">❄️</div>
+                    <h3>Потужність кондиціонера</h3>
+                    <p>Підбір спліт-системи (в кВт та BTU) за площею, висотою стелі та сонячною стороною.</p>
+                </a>
+            </div>
+        </section>
 
-    <button type="button" class="b-copy" onclick="copyText()">📋 Скопировать смету</button>
-    <button type="button" class="b-clr" onclick="clr()">Очистить замер</button>
-</div>
+        <!-- Категорія 4: Загальні будівельні розрахунки -->
+        <section id="zagalni" class="category-section">
+            <h2 class="category-title">🏠 Загальні розрахунки</h2>
+            <div class="cards-grid">
+                <a href="zagalni/remont.html" class="calc-card">
+                    <div class="card-icon">📋</div>
+                    <h3>Ремонт квартири під ключ</h3>
+                    <p>Попередній кошторис вартості робіт і матеріалів залежно від площі та класу ремонту.</p>
+                </a>
+                <a href="zagalni/smittya.html" class="calc-card">
+                    <div class="card-icon">🚛</div>
+                    <h3>Вивіз будівельного сміття</h3>
+                    <p>Розрахунок ваги, об'єму в м³, кількості мішків та підбір вантажного авто.</p>
+                </a>
+            </div>
+        </section>
 
-<script>
-    function num(id) {
-        var el = document.getElementById(id);
-        if (!el) return 0;
-        var v = String(el.value).replace(',', '.');
-        return parseFloat(v) || 0;
-    }
+    </main>
 
-    function calc() {
-        var m = document.getElementById('mat').value;
-        var p = document.getElementById('prof').value;
-        var c = num('cor');
-        var extraCorners = c > 4 ? c - 4 : 0;
-        var curr = document.getElementById('p_curr').value || 'грн';
+    <!-- Підвал сайту -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 БудКальк — Усі будівельні розрахунки в одному місці.</p>
+        </div>
+    </footer>
 
-        var sum =
-            num('area') * num('p_' + m) +
-            num('perim') * num('p_' + p) +
-            num('ins') * num('p_ins') +
-            num('spot') * num('p_spot') +
-            num('chan') * num('p_chan') +
-            num('line') * num('p_line') +
-            num('curt') * num('p_curt') +
-            extraCorners * num('p_cor') +
-            num('pipe') * num('p_pipe') +
-            num('tile') * num('p_tile') +
-            num('ext');
+    <!-- Скрипт для живого пошуку по картках -->
+    <script>
+        document.getElementById('calcSearch').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.calc-card');
+            const sections = document.querySelectorAll('.category-section');
 
-        document.getElementById('tot').innerHTML = Math.round(sum) + ' ' + curr;
-    }
-
-    function copyText() {
-        var curr = document.getElementById('p_curr').value || 'грн';
-        var matSelect = document.getElementById('mat');
-        var matName = matSelect.options[matSelect.selectedIndex].text;
-        var profSelect = document.getElementById('prof');
-        var profName = profSelect.options[profSelect.selectedIndex].text;
-
-        var lines = [];
-        lines.push(document.title + ':');
-        if (num('area') > 0) lines.push('- ' + matName + ': ' + num('area') + ' m2');
-        if (num('perim') > 0) lines.push('- ' + profName + ': ' + num('perim') + ' m.p.');
-        if (num('ins') > 0) lines.push('- Vstavka: ' + num('ins') + ' m.p.');
-        if (num('spot') > 0) lines.push('- Svetilniki: ' + num('spot') + ' sht');
-        if (num('chan') > 0) lines.push('- Lyustry: ' + num('chan') + ' sht');
-        if (num('line') > 0) lines.push('- Svetovye linii: ' + num('line') + ' m.p.');
-        if (num('curt') > 0) lines.push('- Karniz/nisha: ' + num('curt') + ' m.p.');
-        if (num('cor') > 4) lines.push('- Dop. ugly: ' + (num('cor') - 4) + ' sht');
-        if (num('pipe') > 0) lines.push('- Obvod trub: ' + num('pipe') + ' sht');
-        if (num('tile') > 0) lines.push('- Keramogranit: ' + num('tile') + ' m.p.');
-        if (num('ext') > 0) lines.push('- Dop. rashody: ' + num('ext') + ' ' + curr);
-        lines.push('ITOGO: ' + document.getElementById('tot').innerText);
-
-        var text = lines.join('\n');
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(text).then(function() {
-                alert('Смета скопирована!');
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const desc = card.querySelector('p').textContent.toLowerCase();
+                if (title.includes(query) || desc.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
             });
-        } else {
-            prompt('Скопируйте текст сметы вручную (Ctrl+C):', text);
-        }
-    }
 
-    function clr() {
-        var list = ['area', 'perim', 'ins', 'spot', 'chan', 'line', 'curt', 'pipe', 'tile', 'ext'];
-        for (var i = 0; i < list.length; i++) {
-            document.getElementById(list[i]).value = 0;
-        }
-        document.getElementById('cor').value = 4;
-        calc();
-    }
-</script>
+            // Ховаємо заголовок категорії, якщо в ній не залишилося видимих карток
+            sections.forEach(section => {
+                const visibleCards = section.querySelectorAll('.calc-card[style="display: flex;"]');
+                const allCards = section.querySelectorAll('.calc-card');
+                if (query === '') {
+                    section.style.display = 'block';
+                    allCards.forEach(c => c.style.display = 'flex');
+                } else {
+                    section.style.display = visibleCards.length > 0 ? 'block' : 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

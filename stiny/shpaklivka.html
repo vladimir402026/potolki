@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор шпаклівки онлайн — розрахунок витрати стартової та фінішної суміші | БудКальк</title>
+    <meta name="description" content="Точний онлайн-калькулятор шпаклівки: розрахунок ваги суміші та кількості мішків або відер залежно від типу шпаклівки, товщини шару та площі.">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container header-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📐</span>
+                <span class="logo-text">Буд<span class="accent">Кальк</span></span>
+            </a>
+            <nav class="nav">
+                <a href="../index.html#stiny">Стіни та стеля</a>
+                <a href="../index.html#pidloga">Підлога</a>
+                <a href="../index.html#inzheneriya">Інженерія</a>
+                <a href="../index.html#zagalni">Загальні</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumbs">
+            <a href="../index.html">Головна</a> &rarr; 
+            <a href="../index.html#stiny">Стіни та стеля</a> &rarr; 
+            <span>Розрахунок шпаклівки</span>
+        </div>
+
+        <div class="page-header">
+            <h1>Калькулятор розрахунку шпаклівки</h1>
+            <p>Розрахуйте кількість мішків або відер стартової чи фінішної шпаклівки для стін і стелі.</p>
+        </div>
+
+        <div class="calc-wrapper">
+            
+            <!-- Ліва частина: Форма вводу -->
+            <div class="calc-form-box">
+                <div class="form-section-title">1. Параметри поверхні</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="area">Площа поверхні (м²)</label>
+                        <input type="number" id="area" value="40" step="0.5" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="layers">Кількість шарів</label>
+                        <select id="layers">
+                            <option value="1">1 шар</option>
+                            <option value="2" selected>2 шари (стандарт)</option>
+                            <option value="3">3 шари (під фарбування)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section-title">2. Тип шпаклівки та фасування</div>
+                <div class="form-group">
+                    <label for="puttyType">Вид шпаклівки</label>
+                    <select id="puttyType" onchange="updatePutty()">
+                        <option value="1.0|25|2">Гіпсова стартова (напр. HP Start) — ~1.0 кг/м²</option>
+                        <option value="0.9|25|1">Гіпсова фінішна (напр. HP Finish) — ~0.9 кг/м²</option>
+                        <option value="1.1|25|1.5">Цементна фасадна/вологостійка — ~1.1 кг/м²</option>
+                        <option value="1.2|17|1">Готова полімерна паста (відро 17 кг) — ~1.2 кг/м²</option>
+                    </select>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="thickness">Товщина одного шару (мм)</label>
+                        <input type="number" id="thickness" value="2" step="0.5" min="0.5" max="15">
+                    </div>
+                    <div class="form-group">
+                        <label for="mixRate">Витрата на 1 мм (кг/м²)</label>
+                        <input type="number" id="mixRate" value="1.0" step="0.05" min="0.1">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="packWeight">Вага упаковки (кг)</label>
+                        <select id="packWeight" onchange="calculatePutty()">
+                            <option value="25" selected>25 кг (мішок)</option>
+                            <option value="20">20 кг (мішок)</option>
+                            <option value="17">17 кг (відро)</option>
+                            <option value="15">15 кг (мішок / відро)</option>
+                            <option value="5">5 кг (відро)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reserve">Запас на шліфування та втрати (%)</label>
+                        <input type="number" id="reserve" value="10" step="1" min="0" max="50">
+                    </div>
+                </div>
+
+                <button class="btn-calc" onclick="calculatePutty()">Розрахувати шпаклівку</button>
+            </div>
+
+            <!-- Права частина: Результати -->
+            <div class="calc-result-box">
+                <div class="result-header">📊 Результат розрахунку</div>
+                
+                <div class="result-main-card">
+                    <span>Необхідно придбати</span>
+                    <strong id="resPacks">8 уп.</strong>
+                    <span id="resPackNote">по 25 кг (із запасом 10%)</span>
+                </div>
+
+                <ul class="result-list">
+                    <li>
+                        <span>Загальна вага (із запасом):</span>
+                        <strong id="resTotalWeight">176.0 кг</strong>
+                    </li>
+                    <li>
+                        <span>Чиста вага (без запасу):</span>
+                        <strong id="resCleanWeight">160.0 кг</strong>
+                    </li>
+                    <li>
+                        <span>Витрата на 1 м² (за всі шари):</span>
+                        <strong id="resPerSqm">4.0 кг/м²</strong>
+                    </li>
+                </ul>
+
+                <button class="btn-copy" id="copyBtn" onclick="copyResults()">📋 Скопіювати розрахунок</button>
+            </div>
+        </div>
+
+        <article class="seo-article">
+            <h2>Як правильно розрахувати витрату шпаклівки?</h2>
+            <p>Витрата шпаклівки напряму залежить від якості попереднього вирівнювання стін (штукатурки) та типу фінішного покриття:</p>
+            <ul>
+                <li><strong>Під шпалери:</strong> зазвичай достатньо 1–2 шарів стартової або універсальної шпаклівки загальною товщиною 1.5–2 мм.</li>
+                <li><strong>Під фарбування:</strong> поверхня має бути ідеально гладкою. Спочатку наносять 1–2 шари стартової суміші, а зверху — 1–2 тонких шари (по 0.5–1 мм) фінішної полімерної пасти.</li>
+                <li><strong>Запас 10%:</strong> частина матеріалу залишається на стінках відра, шпателі та сточується абразивною сіткою під час шліфування.</li>
+            </ul>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 БудКальк — Усі будівельні розрахунки в одному місці.</p>
+        </div>
+    </footer>
+
+    <script>
+        function updatePutty() {
+            const val = document.getElementById('puttyType').value.split('|');
+            document.getElementById('mixRate').value = val[0];
+            document.getElementById('packWeight').value = val[1];
+            document.getElementById('thickness').value = val[2];
+            calculatePutty();
+        }
+
+        function calculatePutty() {
+            const area = parseFloat(document.getElementById('area').value) || 0;
+            const layers = parseInt(document.getElementById('layers').value) || 1;
+            const thickness = parseFloat(document.getElementById('thickness').value) || 1;
+            const rate = parseFloat(document.getElementById('mixRate').value) || 1.0;
+            const packWeight = parseFloat(document.getElementById('packWeight').value) || 25;
+            const reserve = parseFloat(document.getElementById('reserve').value) || 0;
+
+            const perSqmTotal = rate * thickness * layers;
+            const cleanWeight = area * perSqmTotal;
+            const totalWeight = cleanWeight * (1 + reserve / 100);
+            const packs = Math.ceil(totalWeight / packWeight);
+
+            document.getElementById('resPacks').textContent = packs + ' уп.';
+            document.getElementById('resPackNote').textContent = `по ${packWeight} кг (із запасом ${reserve}%)`;
+            document.getElementById('resTotalWeight').textContent = totalWeight.toFixed(1) + ' кг';
+            document.getElementById('resCleanWeight').textContent = cleanWeight.toFixed(1) + ' кг';
+            document.getElementById('resPerSqm').textContent = perSqmTotal.toFixed(2) + ' кг/м²';
+        }
+
+        function copyResults() {
+            const packs = document.getElementById('resPacks').textContent;
+            const weight = document.getElementById('resTotalWeight').textContent;
+            const area = document.getElementById('area').value;
+
+            const text = `Розрахунок шпаклівки (БудКальк):\n- Потрібно: ${packs} (${weight})\n- Площа: ${area} м²`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Скопійовано в буфер!';
+                setTimeout(() => { btn.textContent = originalText; }, 2000);
+            });
+        }
+
+        window.onload = calculatePutty;
+    </script>
+</body>
+</html>

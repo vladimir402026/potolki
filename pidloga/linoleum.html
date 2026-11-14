@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор лінолеуму та плінтусів онлайн — підбір ширини рулону та фурнітури | БудКальк</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-container">
+            <a href="../index.html" class="logo"><span class="logo-icon">📐</span><span class="logo-text">Буд<span class="accent">Кальк</span></span></a>
+            <nav class="nav">
+                <a href="../index.html#stiny">Стіни та стеля</a>
+                <a href="../index.html#pidloga">Підлога</a>
+                <a href="../index.html#inzheneriya">Інженерія</a>
+                <a href="../index.html#zagalni">Загальні</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumbs"><a href="../index.html">Головна</a> &rarr; <a href="../index.html#pidloga">Підлога та облицювання</a> &rarr; <span>Лінолеум та плінтуси</span></div>
+        <div class="page-header">
+            <h1>Калькулятор лінолеуму та плінтусів</h1>
+            <p>Розрахуйте відріз лінолеуму за шириною рулону, а також кількість планок плінтуса і фурнітури.</p>
+        </div>
+
+        <div class="calc-wrapper">
+            <div class="calc-form-box">
+                <div class="form-section-title">1. Розміри кімнати</div>
+                <div class="form-grid">
+                    <div class="form-group"><label for="roomLength">Довжина кімнати (м)</label><input type="number" id="roomLength" value="4.8" step="0.1" min="0.5"></div>
+                    <div class="form-group"><label for="roomWidth">Ширина кімнати (м)</label><input type="number" id="roomWidth" value="3.3" step="0.1" min="0.5"></div>
+                </div>
+
+                <div class="form-section-title">2. Параметри рулону лінолеуму</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="rollWidth">Ширина рулону в магазині (м)</label>
+                        <select id="rollWidth">
+                            <option value="2.0">2.0 метри</option>
+                            <option value="2.5">2.5 метри</option>
+                            <option value="3.0">3.0 метри</option>
+                            <option value="3.5" selected>3.5 метри</option>
+                            <option value="4.0">4.0 метри</option>
+                            <option value="5.0">5.0 метрів</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label for="trimReserve">Запас на підрізку по довжині (см)</label><input type="number" id="trimReserve" value="10" step="5" min="0" max="50"></div>
+                </div>
+
+                <div class="form-section-title">3. Параметри плінтуса</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="plinthLen">Довжина 1 планки плінтуса (м)</label>
+                        <select id="plinthLen">
+                            <option value="2.5" selected>2.5 метри (стандарт ПВХ)</option>
+                            <option value="2.2">2.2 метри (МДФ / дерево)</option>
+                            <option value="2.4">2.4 метри</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label for="doorCount">Кількість дверних прорізів (шт)</label><input type="number" id="doorCount" value="1" step="1" min="0" max="10"></div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group"><label for="doorWidth">Ширина дверей (м)</label><input type="number" id="doorWidth" value="0.9" step="0.1" min="0"></div>
+                    <div class="form-group"><label for="outerCorners">Зовнішні кути в кімнаті (шт)</label><input type="number" id="outerCorners" value="0" step="1" min="0" max="20"></div>
+                </div>
+
+                <button type="button" class="btn-calc" id="calcBtn">Розрахувати матеріали</button>
+            </div>
+
+            <div class="calc-result-box">
+                <div class="result-header">📊 Результат розрахунку</div>
+                <div class="result-main-card">
+                    <span>Відріз лінолеуму</span>
+                    <strong id="resCut">3.5 × 4.90 м</strong>
+                    <span id="resTotalSqm">площа рулону 17.15 м² (чиста 15.84 м²)</span>
+                </div>
+                <ul class="result-list">
+                    <li><span>Кількість планок плінтуса (<span id="lblPlinthL">2.5</span> м):</span><strong id="resPlinths">7 шт. (15.3 м)</strong></li>
+                    <li><span>Внутрішні куточки:</span><strong id="resInnerCorners">4 шт.</strong></li>
+                    <li><span>Зовнішні куточки:</span><strong id="resOuterCorners">0 шт.</strong></li>
+                    <li><span>З'єднувачі (стики планок):</span><strong id="resConnectors">6 шт.</strong></li>
+                    <li><span>Заглушки (ліва + права біля дверей):</span><strong id="resCaps">2 шт. (1 пар)</strong></li>
+                </ul>
+                <button type="button" class="btn-copy" id="copyBtn">📋 Скопіювати список</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer"><div class="container"><p>&copy; 2026 БудКальк — Усі будівельні розрахунки в одному місці.</p></div></footer>
+
+    <script>
+        function calculateLinoleum() {
+            var roomL = parseFloat(document.getElementById('roomLength').value) || 0;
+            var roomW = parseFloat(document.getElementById('roomWidth').value) || 0;
+            var rollW = parseFloat(document.getElementById('rollWidth').value) || 3.5;
+            var reserveM = (parseFloat(document.getElementById('trimReserve').value) || 0) / 100;
+
+            var plinthL = parseFloat(document.getElementById('plinthLen').value) || 2.5;
+            var doorCount = parseInt(document.getElementById('doorCount').value) || 0;
+            var doorW = parseFloat(document.getElementById('doorWidth').value) || 0.9;
+            var outerCorners = parseInt(document.getElementById('outerCorners').value) || 0;
+
+            var cleanArea = roomL * roomW;
+
+            var cutLength = 0;
+            var warning = '';
+            if (rollW >= roomW) {
+                cutLength = roomL + reserveM;
+            } else if (rollW >= roomL) {
+                cutLength = roomW + reserveM;
+            } else {
+                var strips = Math.ceil(roomW / rollW);
+                cutLength = (roomL + reserveM) * strips;
+                warning = ' (у 2 смуги)';
+            }
+
+            var boughtArea = rollW * cutLength;
+
+            var perimeter = (roomL + roomW) * 2;
+            var cleanPlinthMeters = Math.max(0, perimeter - (doorCount * doorW));
+            var plinthCount = Math.ceil((cleanPlinthMeters * 1.05) / plinthL);
+
+            var innerCorners = 4 + outerCorners;
+            var caps = doorCount * 2;
+            var connectors = Math.max(0, plinthCount - 1);
+
+            document.getElementById('resCut').textContent = rollW + ' × ' + cutLength.toFixed(2) + ' м' + warning;
+            document.getElementById('resTotalSqm').textContent = 'площа рулону ' + boughtArea.toFixed(2) + ' м² (чиста ' + cleanArea.toFixed(2) + ' м²)';
+            
+            document.getElementById('lblPlinthL').textContent = plinthL;
+            document.getElementById('resPlinths').textContent = plinthCount + ' шт. (' + cleanPlinthMeters.toFixed(1) + ' м)';
+            document.getElementById('resInnerCorners').textContent = innerCorners + ' шт.';
+            document.getElementById('resOuterCorners').textContent = outerCorners + ' шт.';
+            document.getElementById('resConnectors').textContent = connectors + ' шт.';
+            document.getElementById('resCaps').textContent = caps + ' шт. (' + doorCount + ' пар)';
+        }
+
+        document.getElementById('rollWidth').addEventListener('change', calculateLinoleum);
+        document.getElementById('plinthLen').addEventListener('change', calculateLinoleum);
+        document.getElementById('calcBtn').addEventListener('click', calculateLinoleum);
+
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            var cut = document.getElementById('resCut').textContent;
+            var plinths = document.getElementById('resPlinths').textContent;
+            var inner = document.getElementById('resInnerCorners').textContent;
+            var caps = document.getElementById('resCaps').textContent;
+            var text = "Розрахунок лінолеуму та плінтусів (БудКальк):\n- Відріз лінолеуму: " + cut + "\n- Плінтус: " + plinths + "\n- Куточки: " + inner + ", заглушки: " + caps;
+
+            var el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            var btn = this;
+            btn.textContent = '✅ Скопійовано!';
+            setTimeout(function() { btn.textContent = '📋 Скопіювати список'; }, 2000);
+        });
+
+        calculateLinoleum();
+    </script>
+</body>
+</html>

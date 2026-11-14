@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор вивозу будівельного сміття онлайн | БудКальк</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-container">
+            <a href="../index.html" class="logo"><span class="logo-icon">📐</span><span class="logo-text">Буд<span class="accent">Кальк</span></span></a>
+            <nav class="nav">
+                <a href="../index.html#stiny">Стіни та стеля</a>
+                <a href="../index.html#pidloga">Підлога</a>
+                <a href="../index.html#inzheneriya">Інженерія</a>
+                <a href="../index.html#zagalni">Загальні</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumbs"><a href="../index.html">Головна</a> &rarr; <a href="../index.html#zagalni">Загальні розрахунки</a> &rarr; <span>Вивіз будівельного сміття</span></div>
+        <div class="page-header">
+            <h1>Калькулятор вивозу будівельного сміття</h1>
+            <p>Розрахуйте вагу та об'єм відходів після демонтажу, кількість мішків і підберіть відповідний вантажний транспорт.</p>
+        </div>
+
+        <div class="calc-wrapper">
+            <div class="calc-form-box">
+                <div class="form-section-title">1. Спосіб розрахунку</div>
+                <div class="form-group">
+                    <label for="calcType">Як будемо рахувати?</label>
+                    <select id="calcType">
+                        <option value="bags" selected>За кількістю наповнених мішків</option>
+                        <option value="demolition">За типом демонтажних робіт (площа / об'єм)</option>
+                    </select>
+                </div>
+
+                <div id="bagsBlock">
+                    <div class="form-grid">
+                        <div class="form-group"><label for="bagCount">Кількість мішків (шт)</label><input type="number" id="bagCount" value="40" step="1" min="1" max="1000"></div>
+                        <div class="form-group">
+                            <label for="wasteFill">Чим наповнені мішки?</label>
+                            <select id="wasteFill">
+                                <option value="heavy" selected>Бій цегли, бетону, штукатурки (~35 кг/мішок)</option>
+                                <option value="medium">Змішане сміття: плитка, гіпсокартон (~25 кг/мішок)</option>
+                                <option value="light">Легке сміття: шпалери, пінопласт, упаковка (~15 кг/мішок)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="demolitionBlock" style="display: none;">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="demoWork">Вид демонтажу</label>
+                            <select id="demoWork">
+                                <option value="screed">Зняття старої стяжки підлоги (товщина ~5 см)</option>
+                                <option value="tile">Збивання старої плитки зі стін/підлоги</option>
+                                <option value="brick">Демонтаж цегляної перегородки (в півцеглини)</option>
+                                <option value="drywall">Демонтаж перегородки з гіпсокартону / газоблоку</option>
+                                <option value="plaster">Зняття старої штукатурки зі стін</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label for="demoArea">Площа демонтажу (м²)</label><input type="number" id="demoArea" value="25" step="1" min="1"></div>
+                    </div>
+                </div>
+
+                <div class="form-section-title">2. Додатково</div>
+                <div class="form-group">
+                    <label for="bulkyItems">Великогабаритне сміття (старі двері, ванна, вікна, меблі)</label>
+                    <select id="bulkyItems">
+                        <option value="none" selected>Немає (тільки сміття в мішках)</option>
+                        <option value="some">Трохи (2–3 дверних полотна або старі вікна, +1.5 м³)</option>
+                        <option value="many">Багато (старі меблі, ванна, рами, +3.5 м³)</option>
+                    </select>
+                </div>
+
+                <button type="button" class="btn-calc" id="calcBtn">Розрахувати вивіз</button>
+            </div>
+
+            <div class="calc-result-box">
+                <div class="result-header">📊 Результат розрахунку</div>
+                <div class="result-main-card">
+                    <span>Рекомендований транспорт</span>
+                    <strong id="resTruck">Газель / Бус (до 1.5 т)</strong>
+                    <span id="resTruckNote">кузов 8–10 м³</span>
+                </div>
+                <ul class="result-list">
+                    <li><span>Загальна вага сміття:</span><strong id="resWeight">1400 кг (1.40 т)</strong></li>
+                    <li><span>Орієнтовний об'єм відходів:</span><strong id="resVolume">1.40 м³</strong></li>
+                    <li><span>Кількість мішків (по 50 л):</span><strong id="resBags">40 шт.</strong></li>
+                    <li><span>Рекомендована кількість вантажників:</span><strong id="resLoaders">2 чол.</strong></li>
+                </ul>
+                <button type="button" class="btn-copy" id="copyBtn">📋 Скопіювати розрахунок</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer"><div class="container"><p>&copy; 2026 БудКальк — Усі будівельні розрахунки в одному місці.</p></div></footer>
+    <script src="../js/smittya.js"></script>
+</body>
+</html>

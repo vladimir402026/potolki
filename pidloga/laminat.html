@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор ламінату онлайн — розрахунок упаковок та планок на кімнату | БудКальк</title>
+    <meta name="description" content="Точний онлайн-калькулятор ламінату: розрахунок кількості упаковок, дощок та м² при прямому або діагональному укладанні.">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container header-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📐</span>
+                <span class="logo-text">Буд<span class="accent">Кальк</span></span>
+            </a>
+            <nav class="nav">
+                <a href="../index.html#stiny">Стіни та стеля</a>
+                <a href="../index.html#pidloga">Підлога</a>
+                <a href="../index.html#inzheneriya">Інженерія</a>
+                <a href="../index.html#zagalni">Загальні</a>
+            </nav>
+        </div>
+    </main>
+
+    <main class="container">
+        <div class="breadcrumbs">
+            <a href="../index.html">Головна</a> &rarr; 
+            <a href="../index.html#pidloga">Підлога та облицювання</a> &rarr; 
+            <span>Калькулятор ламінату</span>
+        </div>
+
+        <div class="page-header">
+            <h1>Калькулятор розрахунку ламінату</h1>
+            <p>Розрахуйте точну кількість упаковок та планок ламінату залежно від площі кімнати та способу укладання.</p>
+        </div>
+
+        <div class="calc-wrapper">
+            
+            <!-- Ліва частина: Форма вводу -->
+            <div class="calc-form-box">
+                <div class="form-section-title">1. Розміри приміщення</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="roomLength">Довжина кімнати (м)</label>
+                        <input type="number" id="roomLength" value="4.5" step="0.1" min="0.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="roomWidth">Ширина кімнати (м)</label>
+                        <input type="number" id="roomWidth" value="3.2" step="0.1" min="0.5">
+                    </div>
+                </div>
+
+                <div class="form-section-title">2. Параметри дошки та упаковки</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="plankLength">Довжина планки (мм)</label>
+                        <input type="number" id="plankLength" value="1380" step="1" min="300">
+                    </div>
+                    <div class="form-group">
+                        <label for="plankWidth">Ширина планки (мм)</label>
+                        <input type="number" id="plankWidth" value="193" step="1" min="80">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="planksPerPack">Кількість планок в упаковці (шт)</label>
+                        <input type="number" id="planksPerPack" value="8" step="1" min="1" max="30">
+                    </div>
+                    <div class="form-group">
+                        <label for="layMethod">Спосіб укладання (запас)</label>
+                        <select id="layMethod" onchange="calculateLaminate()">
+                            <option value="5">Пряме зі зміщенням 1/3 (+5%)</option>
+                            <option value="7">Пряме зі зміщенням 1/2 (+7%)</option>
+                            <option value="10">Діагональне під кутом 45° (+10%)</option>
+                            <option value="15">Складна геометрія / еркери (+15%)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn-calc" onclick="calculateLaminate()">Розрахувати ламінат</button>
+            </div>
+
+            <!-- Права частина: Результати -->
+            <div class="calc-result-box">
+                <div class="result-header">📊 Результат розрахунку</div>
+                
+                <div class="result-main-card">
+                    <span>Необхідно придбати</span>
+                    <strong id="resPacks">8 уп.</strong>
+                    <span id="resPlanksNote">всього 64 планки (із запасом)</span>
+                </div>
+
+                <ul class="result-list">
+                    <li>
+                        <span>Чиста площа кімнати:</span>
+                        <strong id="resCleanArea">14.40 м²</strong>
+                    </li>
+                    <li>
+                        <span>Площа з урахуванням запасу:</span>
+                        <strong id="resNeededArea">15.12 м²</strong>
+                    </li>
+                    <li>
+                        <span>Загальна площа в куплених пачках:</span>
+                        <strong id="resBoughtArea">17.05 м²</strong>
+                    </li>
+                    <li>
+                        <span>Площа 1 упаковки:</span>
+                        <strong id="resPackArea">2.13 м²</strong>
+                    </li>
+                    <li>
+                        <span>Підкладка під ламінат (мінімум):</span>
+                        <strong id="resUnderlay">16 м²</strong>
+                    </li>
+                </ul>
+
+                <button class="btn-copy" id="copyBtn" onclick="copyResults()">📋 Скопіювати розрахунок</button>
+            </div>
+        </div>
+
+        <article class="seo-article">
+            <h2>Як вибрати спосіб укладання та запас ламінату?</h2>
+            <p>Ламінат продається цілими упаковками, тому розрахунок завжди округлюється у більший бік. Залишок у 2–3 дошки варто зберегти на випадок локального ремонту в майбутньому.</p>
+            <ul>
+                <li><strong>Пряме укладання (запас 5–7%):</strong> класичний варіант паралельно світлу з вікна. Підрізаний шматок останньої дошки в ряду зазвичай використовується для початку наступного ряду, що мінімізує відходи.</li>
+                <li><strong>Діагональне укладання (запас 10–12%):</strong> візуально розширює вузькі кімнати, але вимагає обрізання кутів біля всіх чотирьох стін, тому відходів значно більше.</li>
+                <li><strong>Компенсаційний зазор:</strong> не забудьте залишити 8–10 мм відступу від усіх стін та труб опалення, щоб покриття не здулося при зміні вологості.</li>
+            </ul>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 БудКальк — Усі будівельні розрахунки в одному місці.</p>
+        </div>
+    </footer>
+
+    <script>
+        function calculateLaminate() {
+            const roomL = parseFloat(document.getElementById('roomLength').value) || 0;
+            const roomW = parseFloat(document.getElementById('roomWidth').value) || 0;
+            const plankL = (parseFloat(document.getElementById('plankLength').value) || 1380) / 1000;
+            const plankW = (parseFloat(document.getElementById('plankWidth').value) || 193) / 1000;
+            const perPack = parseInt(document.getElementById('planksPerPack').value) || 8;
+            const reserve = parseFloat(document.getElementById('layMethod').value) || 5;
+
+            const cleanArea = roomL * roomW;
+            const neededArea = cleanArea * (1 + reserve / 100);
+            const plankArea = plankL * plankW;
+            const packArea = plankArea * perPack;
+
+            const packsNeeded = Math.ceil(neededArea / packArea);
+            const totalPlanks = packsNeeded * perPack;
+            const boughtArea = packsNeeded * packArea;
+            const underlay = Math.ceil(cleanArea * 1.05);
+
+            document.getElementById('resPacks').textContent = packsNeeded + ' уп.';
+            document.getElementById('resPlanksNote').textContent = `всього ${totalPlanks} планок (запас ${reserve}%)`;
+            document.getElementById('resCleanArea').textContent = cleanArea.toFixed(2) + ' м²';
+            document.getElementById('resNeededArea').textContent = neededArea.toFixed(2) + ' м²';
+            document.getElementById('resBoughtArea').textContent = boughtArea.toFixed(2) + ' м²';
+            document.getElementById('resPackArea').textContent = packArea.toFixed(2) + ' м²';
+            document.getElementById('resUnderlay').textContent = underlay + ' м²';
+        }
+
+        function copyResults() {
+            const packs = document.getElementById('resPacks').textContent;
+            const bought = document.getElementById('resBoughtArea').textContent;
+            const clean = document.getElementById('resCleanArea').textContent;
+
+            const text = `Розрахунок ламінату (БудКальк):\n- Потрібно упаковок: ${packs} (${bought})\n- Чиста площа підлоги: ${clean}`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Скопійовано в буфер!';
+                setTimeout(() => { btn.textContent = originalText; }, 2000);
+            });
+        }
+
+        window.onload = calculateLaminate;
+    </script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор радіаторів опалення онлайн — розрахунок кількості секцій на кімнату | БудКальк</title>
+    <meta name="description" content="Точний онлайн-калькулятор радіаторів опалення: розрахунок теплової потужності (Вт) та кількості секцій біметалевих, алюмінієвих чи чавунних батарей.">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container header-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📐</span>
+                <span class="logo-text">Буд<span class="accent">Кальк</span></span>
+            </a>
+            <nav class="nav">
+                <a href="../index.html#stiny">Стіни та стеля</a>
+                <a href="../index.html#pidloga">Підлога</a>
+                <a href="../index.html#inzheneriya">Інженерія</a>
+                <a href="../index.html#zagalni">Загальні</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumbs">
+            <a href="../index.html">Головна</a> &rarr; 
+            <a href="../index.html#inzheneriya">Інженерія, електрика та клімат</a> &rarr; 
+            <span>Радіатори опалення</span>
+        </div>
+
+        <div class="page-header">
+            <h1>Калькулятор радіаторів опалення</h1>
+            <p>Розрахуйте необхідну теплову потужність та кількість секцій батарей для ефективного обігріву кімнати.</p>
+        </div>
+
+        <div class="calc-wrapper">
+            
+            <!-- Ліва частина: Форма вводу -->
+            <div class="calc-form-box">
+                <div class="form-section-title">1. Параметри кімнати</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="area">Площа кімнати (м²)</label>
+                        <input type="number" id="area" value="18" step="0.5" min="2">
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Висота стелі (м)</label>
+                        <input type="number" id="height" value="2.7" step="0.1" min="2" max="5">
+                    </div>
+                </div>
+
+                <div class="form-section-title">2. Тепловтрати та вікна</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="wallPosition">Розташування кімнати</label>
+                        <select id="wallPosition" onchange="calculateRadiators()">
+                            <option value="1.0" selected>Некутова (1 зовнішня стіна)</option>
+                            <option value="1.2">Кутова (2 зовнішні стіни, +20%)</option>
+                            <option value="1.3">Кутова + перший/останній поверх (+30%)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="insulation">Утеплення та скління</label>
+                        <select id="insulation" onchange="calculateRadiators()">
+                            <option value="0.85">Сучасний утеплений будинок + енергозберігаючі вікна</option>
+                            <option value="1.0" selected>Стандартний будинок + металопластикові вікна</option>
+                            <option value="1.2">Старий будинок без утеплення / дерев'яні вікна</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section-title">3. Тип радіатора</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="radType">Матеріал батареї</label>
+                        <select id="radType" onchange="updateSectionPower()">
+                            <option value="170" selected>Біметалевий 500 мм (~170 Вт/секція)</option>
+                            <option value="190">Алюмінієвий 500 мм (~190 Вт/секція)</option>
+                            <option value="130">Біметал/Алюміній низький 350 мм (~130 Вт/секція)</option>
+                            <option value="140">Чавунний стандартний (~140 Вт/секція)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sectionPower">Потужність 1 секції (Вт)</label>
+                        <input type="number" id="sectionPower" value="170" step="5" min="50" max="300">
+                    </div>
+                </div>
+
+                <button class="btn-calc" onclick="calculateRadiators()">Розрахувати секції</button>
+            </div>
+
+            <!-- Права частина: Результати -->
+            <div class="calc-result-box">
+                <div class="result-header">📊 Результат розрахунку</div>
+                
+                <div class="result-main-card">
+                    <span>Необхідна кількість</span>
+                    <strong id="resSections">11 секцій</strong>
+                    <span id="resTotalWatt">сумарна потужність 1870 Вт</span>
+                </div>
+
+                <ul class="result-list">
+                    <li>
+                        <span>Розрахункова тепловтрата кімнати:</span>
+                        <strong id="resNeededWatt">1800 Вт</strong>
+                    </li>
+                    <li>
+                        <span>Об'єм приміщення:</span>
+                        <strong id="resVolume">48.6 м³</strong>
+                    </li>
+                    <li>
+                        <span>Потужність однієї секції:</span>
+                        <strong id="resOneSec">170 Вт</strong>
+                    </li>
+                </ul>
+
+                <button class="btn-copy" id="copyBtn" onclick="copyResults()">📋 Скопіювати розрахунок</button>
+            </div>
+        </div>
+
+        <article class="seo-article">
+            <h2>Як правильно підібрати радіатори опалення?</h2>
+            <p>Базова норма для кліматичної зони України становить <strong>100 Вт теплової енергії на 1 м²</strong> площі при висоті стелі до 2.7 м. Проте під час вибору батарей варто враховувати важливі нюанси:</p>
+            <ul>
+                <li><strong>Паспортна потужність vs реальна:</strong> виробники вказують теплову потужність секції (170–190 Вт) при температурі теплоносія ΔT = 70°C (подача 90°C). У реальних системах автономного опалення котел зазвичай нагріває воду до 65–70°C, тому реальна тепловіддача секції на 15–20% нижча — краще округляти кількість секцій у більший бік.</li>
+                <li><strong>Біметал чи алюміній:</strong> для квартир із централізованим опаленням (де бувають гідроудари та агресивний теплоносій) обирайте виключно <strong>біметалеві радіатори</strong> зі сталевим осердям. Алюмінієві підходять для приватних будинків з індивідуальним котлом.</li>
+            </ul>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 БудКальк — Усі будівельні розрахунки в одному місці.</p>
+        </div>
+    </footer>
+
+    <script>
+        function updateSectionPower() {
+            const val = document.getElementById('radType').value;
+            document.getElementById('sectionPower').value = val;
+            calculateRadiators();
+        }
+
+        function calculateRadiators() {
+            const area = parseFloat(document.getElementById('area').value) || 0;
+            const height = parseFloat(document.getElementById('height').value) || 2.7;
+            const posCoef = parseFloat(document.getElementById('wallPosition').value) || 1.0;
+            const insCoef = parseFloat(document.getElementById('insulation').value) || 1.0;
+            const secPower = parseFloat(document.getElementById('sectionPower').value) || 170;
+
+            const volume = area * height;
+            const heightCoef = height / 2.7;
+            const neededWatt = Math.round(area * 100 * heightCoef * posCoef * insCoef);
+            const sections = Math.ceil(neededWatt / secPower);
+            const totalInstalledWatt = sections * secPower;
+
+            let secWord = 'секцій';
+            const lastDigit = sections % 10;
+            const lastTwoDigits = sections % 100;
+            if (lastDigit === 1 && lastTwoDigits !== 11) {
+                secWord = 'секція';
+            } else if (lastDigit >= 2 && lastDigit <= 4 && (lastTwoDigits < 12 || lastTwoDigits > 14)) {
+                secWord = 'секції';
+            }
+
+            document.getElementById('resSections').textContent = `${sections} ${secWord}`;
+            document.getElementById('resTotalWatt').textContent = `сумарна потужність ${totalInstalledWatt} Вт`;
+            document.getElementById('resNeededWatt').textContent = `${neededWatt} Вт`;
+            document.getElementById('resVolume').textContent = `${volume.toFixed(1)} м³`;
+            document.getElementById('resOneSec').textContent = `${secPower} Вт`;
+        }
+
+        function copyResults() {
+            const secs = document.getElementById('resSections').textContent;
+            const watt = document.getElementById('resTotalWatt').textContent;
+            const area = document.getElementById('area').value;
+
+            const text = `Розрахунок радіаторів (БудКальк):\n- Потрібно: ${secs} (${watt})\n- Площа кімнати: ${area} м²`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Скопійовано в буфер!';
+                setTimeout(() => { btn.textContent = originalText; }, 2000);
+            });
+        }
+
+        window.onload = calculateRadiators;
+    </script>
+</body>
+</html>

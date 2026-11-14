@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор плиткового клею онлайн — розрахунок мішків та витрати на м² | БудКальк</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-container">
+            <a href="../index.html" class="logo"><span class="logo-icon">📐</span><span class="logo-text">Буд<span class="accent">Кальк</span></span></a>
+            <nav class="nav">
+                <a href="../index.html#stiny">Стіни та стеля</a>
+                <a href="../index.html#pidloga">Підлога</a>
+                <a href="../index.html#inzheneriya">Інженерія</a>
+                <a href="../index.html#zagalni">Загальні</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumbs"><a href="../index.html">Головна</a> &rarr; <a href="../index.html#pidloga">Підлога та облицювання</a> &rarr; <span>Плитковий клей</span></div>
+        <div class="page-header">
+            <h1>Калькулятор плиткового клею</h1>
+            <p>Розрахуйте кількість мішків клею залежно від площі укладання, розміру плитки та висоти зубця шпателя.</p>
+        </div>
+
+        <div class="calc-wrapper">
+            <div class="calc-form-box">
+                <div class="form-section-title">1. Площа та розмір плитки</div>
+                <div class="form-grid">
+                    <div class="form-group"><label for="area">Площа укладання (м²)</label><input type="number" id="area" value="15" step="0.5" min="0.5"></div>
+                    <div class="form-group">
+                        <label for="tileFormat">Формат плитки та зуб шпателя</label>
+                        <select id="tileFormat">
+                            <option value="mosaic">Мозаїка (зуб шпателя 4 мм)</option>
+                            <option value="small">Мала 10×10 — 20×20 см (зуб 6 мм)</option>
+                            <option value="medium" selected>Середня 30×30 — 45×45 см (зуб 8 мм)</option>
+                            <option value="large">Велика 60×60 см (зуб 10 мм)</option>
+                            <option value="xlarge">Великоформатна 120×60 см (зуб 12 мм)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section-title">2. Параметри суміші та нанесення</div>
+                <div class="form-grid">
+                    <div class="form-group"><label for="glueRate">Базова витрата клею (кг/м²)</label><input type="number" id="glueRate" value="4.2" step="0.1" min="1"></div>
+                    <div class="form-group">
+                        <label for="bagWeight">Вага мішка (кг)</label>
+                        <select id="bagWeight">
+                            <option value="25" selected>25 кг (стандарт)</option>
+                            <option value="20">20 кг</option>
+                            <option value="5">5 кг (дрібне фасування)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="doubleApply">Спосіб нанесення</label>
+                        <select id="doubleApply">
+                            <option value="1" selected>Тільки на основу (стіну/підлогу)</option>
+                            <option value="1.2">Комбінований (на основу + на плитку, +20%)</option>
+                            <option value="1.25">Подвійне нанесення (великий формат, +25%)</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label for="reserve">Запас на нерівності основи (%)</label><input type="number" id="reserve" value="10" step="1" min="0" max="40"></div>
+                </div>
+
+                <button type="button" class="btn-calc" id="calcBtn">Розрахувати клей</button>
+            </div>
+
+            <div class="calc-result-box">
+                <div class="result-header">📊 Результат розрахунку</div>
+                <div class="result-main-card">
+                    <span>Необхідно придбати</span>
+                    <strong id="resBags">3 мішки</strong>
+                    <span id="resBagNote">по 25 кг (всього 69.3 кг)</span>
+                </div>
+                <ul class="result-list">
+                    <li><span>Загальна вага (із запасом):</span><strong id="resTotalWeight">69.3 кг</strong></li>
+                    <li><span>Чиста вага (без запасу):</span><strong id="resCleanWeight">63.0 кг</strong></li>
+                    <li><span>Підсумкова витрата на 1 м²:</span><strong id="resFinalRate">4.20 кг/м²</strong></li>
+                    <li><span>Орієнтовно води для замісу:</span><strong id="resWater">~15 л</strong></li>
+                </ul>
+                <button type="button" class="btn-copy" id="copyBtn">📋 Скопіювати розрахунок</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer"><div class="container"><p>&copy; 2026 БудКальк — Усі будівельні розрахунки в одному місці.</p></div></footer>
+
+    <script>
+        function calculateGlue() {
+            var area = parseFloat(document.getElementById('area').value) || 0;
+            var baseRate = parseFloat(document.getElementById('glueRate').value) || 4.2;
+            var bagWeight = parseFloat(document.getElementById('bagWeight').value) || 25;
+            var doubleMult = parseFloat(document.getElementById('doubleApply').value) || 1;
+            var reserve = parseFloat(document.getElementById('reserve').value) || 0;
+
+            var finalRate = baseRate * doubleMult;
+            var cleanWeight = area * finalRate;
+            var totalWeight = cleanWeight * (1 + reserve / 100);
+            var bags = Math.ceil(totalWeight / bagWeight);
+            var water = Math.round(totalWeight * 0.22);
+
+            var bagWord = 'мішків';
+            if (bags === 1) bagWord = 'мішок';
+            else if (bags >= 2 && bags <= 4) bagWord = 'мішки';
+
+            document.getElementById('resBags').textContent = bags + ' ' + bagWord;
+            document.getElementById('resBagNote').textContent = 'по ' + bagWeight + ' кг (всього ' + totalWeight.toFixed(1) + ' кг)';
+            document.getElementById('resTotalWeight').textContent = totalWeight.toFixed(1) + ' кг';
+            document.getElementById('resCleanWeight').textContent = cleanWeight.toFixed(1) + ' кг';
+            document.getElementById('resFinalRate').textContent = finalRate.toFixed(2) + ' кг/м²';
+            document.getElementById('resWater').textContent = '~' + water + ' л';
+        }
+
+        document.getElementById('tileFormat').addEventListener('change', function() {
+            var fmt = this.value;
+            if (fmt === 'mosaic') { document.getElementById('glueRate').value = 2.0; document.getElementById('doubleApply').value = '1'; }
+            else if (fmt === 'small') { document.getElementById('glueRate').value = 3.0; document.getElementById('doubleApply').value = '1'; }
+            else if (fmt === 'medium') { document.getElementById('glueRate').value = 4.2; document.getElementById('doubleApply').value = '1'; }
+            else if (fmt === 'large') { document.getElementById('glueRate').value = 5.0; document.getElementById('doubleApply').value = '1.2'; }
+            else if (fmt === 'xlarge') { document.getElementById('glueRate').value = 6.0; document.getElementById('doubleApply').value = '1.25'; }
+            calculateGlue();
+        });
+
+        document.getElementById('calcBtn').addEventListener('click', calculateGlue);
+
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            var bags = document.getElementById('resBags').textContent;
+            var weight = document.getElementById('resTotalWeight').textContent;
+            var area = document.getElementById('area').value;
+            var text = "Розрахунок плиткового клею (БудКальк):\n- Потрібно: " + bags + " (" + weight + ")\n- Площа укладання: " + area + " м²";
+
+            var el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            var btn = this;
+            btn.textContent = '✅ Скопійовано!';
+            setTimeout(function() { btn.textContent = '📋 Скопіювати розрахунок'; }, 2000);
+        });
+
+        calculateGlue();
+    </script>
+</body>
+</html>
